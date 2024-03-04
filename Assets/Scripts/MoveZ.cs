@@ -8,6 +8,6 @@ public class MoveZ : MonoBehaviour
 
     private void Update()
     {
-        transform.position = transform.position + Vector3.forward * zVelocity * Time.deltaTime;
+        transform.position = transform.position + transform.forward * zVelocity * Time.deltaTime;
     }
 }

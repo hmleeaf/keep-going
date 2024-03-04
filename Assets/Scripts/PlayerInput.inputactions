@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Jump",
+                    "name": "Dash",
                     "type": "Button",
                     "id": "a660823c-4e26-4753-99e2-90fc3b506a4a",
                     "expectedControlType": "Button",
@@ -26,16 +26,7 @@
                 {
                     "name": "Attack",
                     "type": "Button",
-                    "id": "a4348037-e625-4a19-98c0-4ff1583f600a",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Guard",
-                    "type": "Button",
-                    "id": "d590fda2-3181-499c-89ab-51ca341c2a75",
+                    "id": "2f38cfb2-9781-458e-af21-51f4a4f883f5",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -105,29 +96,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Jump",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "25539605-5ac6-49c3-81ad-2f8ba9ab5972",
+                    "id": "0e6f167c-ac80-479f-9a46-72fb9d3d707b",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "68388c99-c7d9-4a97-8c23-04bfadbdbdf2",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Guard",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

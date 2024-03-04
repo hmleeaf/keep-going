@@ -8,24 +8,29 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
-    [SerializeField] float stoppingTime = 0.2f;
-    [SerializeField] float jumpForceMultiplier = 10f;
-    [SerializeField] float gravityMultiplier = 1f;
-    [SerializeField] float jumpCooldown = 0.1f;
     [SerializeField] float atkCooldown = 0.1f;
     [SerializeField] float bulletHeightFromFeet = 1f;
-    [SerializeField] float moveXMin = -10f;
-    [SerializeField] float moveXMax = 10f;
+    [SerializeField] float dashCooldown = 0.3f;
+    [SerializeField] float dashStrength = 20;
+    [SerializeField] float dashTime = 0.3f;
+    [SerializeField] float playableAreaMin = -10f;
+    [SerializeField] float playableAreaMax = 10f;
     [SerializeField] GameObject bulletPrefab;
 
     Rigidbody rb;
+    TrailRenderer trailRenderer;
     PlayerInput input;
     Vector3 mouseWorldPoint;
-    bool isGrounded = true;
-    Vector3 lastXZMoveDir;
-    bool toJump = false;
-    float lastjumpTime = float.MinValue;
     float lastAtkTime = float.MinValue;
+    float lastDashTime = float.MinValue;
+    Vector3 moveDir = Vector3.zero;
+    Vector3 dashDir = Vector3.zero;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        trailRenderer = GetComponent<TrailRenderer>();
+    }
 
     void OnEnable()
     {
@@ -40,71 +45,86 @@ public class PlayerController : MonoBehaviour
         input.Player.Disable();
     }
 
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
-
     void Update()
     {
-        // move with input
+        RaycastMouse();
+        OrientForward();
+        Move();
+        Dash();
+        ClampToPlayableArea();
+        Attack();
+        Trail();
+    }
+
+    private void RaycastMouse()
+    {
+        Ray mouseRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        LayerMask mouseMask = 1 << LayerMask.NameToLayer("CursorPlane");
+        RaycastHit hit;
+        if (Physics.Raycast(mouseRay, out hit, 50f, mouseMask, QueryTriggerInteraction.Collide))
+        {
+            mouseWorldPoint = hit.point;
+        }
+    }
+    
+    private void OrientForward()
+    {
+        transform.forward = Vector3.ProjectOnPlane(mouseWorldPoint - transform.position, Vector3.up).normalized;
+    }
+
+    private void Move()
+    {
         Vector2 moveInput = input.Player.Move.ReadValue<Vector2>();
-        Vector3 moveDir = new Vector3(moveInput.x, 0, moveInput.y);
+        moveDir = new Vector3(moveInput.x, 0, moveInput.y);
         moveDir.Normalize();
-        transform.position = transform.position + moveDir * moveSpeed * Time.deltaTime;
-        if (transform.position.x < moveXMin)
-        {
-            transform.position = new Vector3(moveXMin, transform.position.y, transform.position.z);
-        }
-        else if (transform.position.x > moveXMax)
-        {
-            transform.position = new Vector3(moveXMax, transform.position.y, transform.position.z);
-        }
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity + moveDir * moveSpeed, Mathf.Max(rb.velocity.magnitude, moveSpeed));
+    }
 
-        // jump
-        if (input.Player.Jump.IsPressed() && isGrounded && !toJump && Time.time > lastjumpTime + jumpCooldown)
+    private void Dash()
+    {
+        if (input.Player.Dash.IsPressed() && Time.time > lastDashTime + dashCooldown)
         {
-            toJump = true;
+            lastDashTime = Time.time;
+            rb.velocity += moveDir * dashStrength;
         }
+    }
 
-        // attack
+    private void ClampToPlayableArea()
+    {
+        if (transform.position.x < playableAreaMin)
+        {
+            transform.position = new Vector3(playableAreaMin, transform.position.y, transform.position.z);
+        }
+        else if (transform.position.x > playableAreaMax)
+        {
+            transform.position = new Vector3(playableAreaMax, transform.position.y, transform.position.z);
+        }
+    }
+
+    private void Attack()
+    {
         if (input.Player.Attack.IsPressed() && Time.time > lastAtkTime + atkCooldown)
         {
-            lastAtkTime = Time.time; 
+            lastAtkTime = Time.time;
             GameObject obj = Instantiate(bulletPrefab);
             obj.transform.position = new Vector3(
-                transform.position.x, 
-                transform.position.y + bulletHeightFromFeet, 
+                transform.position.x,
+                transform.position.y + bulletHeightFromFeet,
                 transform.position.z
             );
+            obj.transform.forward = transform.forward;
         }
     }
 
-    private void FixedUpdate()
+    void Trail()
     {
-        if (toJump)
+        if (rb.velocity.magnitude > moveSpeed + 1f)
         {
-            toJump = false;
-            lastjumpTime = Time.time;
-            rb.AddForce(Vector3.up * jumpForceMultiplier, ForceMode.Impulse);
-        }
-
-        rb.AddForce(Physics.gravity * gravityMultiplier, ForceMode.Acceleration);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            trailRenderer.emitting = true;
+        } 
+        else
         {
-            isGrounded = true;
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            isGrounded = false;
+            trailRenderer.emitting = false;
         }
     }
 
