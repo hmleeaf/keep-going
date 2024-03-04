@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpForceMultiplier = 10f;
     [SerializeField] float gravityMultiplier = 1f;
     [SerializeField] float jumpCooldown = 0.1f;
+    [SerializeField] float atkCooldown = 0.1f;
+    [SerializeField] float bulletHeightFromFeet = 1f;
+    [SerializeField] float moveXMin = -10f;
+    [SerializeField] float moveXMax = 10f;
+    [SerializeField] GameObject bulletPrefab;
 
     Rigidbody rb;
     PlayerInput input;
@@ -19,6 +25,7 @@ public class PlayerController : MonoBehaviour
     Vector3 lastXZMoveDir;
     bool toJump = false;
     float lastjumpTime = float.MinValue;
+    float lastAtkTime = float.MinValue;
 
     void OnEnable()
     {
@@ -40,29 +47,36 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // raycast from cursor to ground for aim position
-        //Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        //LayerMask mask = 1 << LayerMask.NameToLayer("Ground");
-        //RaycastHit hit;
-        //Physics.Raycast(ray, out hit, 50f, mask, QueryTriggerInteraction.UseGlobal);
-        //mouseWorldPoint = hit.point;
-
-        //// set forward to look at the cursor
-        //Vector3 newForward = mouseWorldPoint - transform.position;
-        //newForward.y = 0;
-        //newForward.Normalize();
-        //// transform.forward = newForward;
-
         // move with input
         Vector2 moveInput = input.Player.Move.ReadValue<Vector2>();
         Vector3 moveDir = new Vector3(moveInput.x, 0, moveInput.y);
         moveDir.Normalize();
         transform.position = transform.position + moveDir * moveSpeed * Time.deltaTime;
+        if (transform.position.x < moveXMin)
+        {
+            transform.position = new Vector3(moveXMin, transform.position.y, transform.position.z);
+        }
+        else if (transform.position.x > moveXMax)
+        {
+            transform.position = new Vector3(moveXMax, transform.position.y, transform.position.z);
+        }
 
         // jump
-        if (input.Player.Dash.IsPressed() && isGrounded && !toJump && Time.time > lastjumpTime + jumpCooldown)
+        if (input.Player.Jump.IsPressed() && isGrounded && !toJump && Time.time > lastjumpTime + jumpCooldown)
         {
             toJump = true;
+        }
+
+        // attack
+        if (input.Player.Attack.IsPressed() && Time.time > lastAtkTime + atkCooldown)
+        {
+            lastAtkTime = Time.time; 
+            GameObject obj = Instantiate(bulletPrefab);
+            obj.transform.position = new Vector3(
+                transform.position.x, 
+                transform.position.y + bulletHeightFromFeet, 
+                transform.position.z
+            );
         }
     }
 

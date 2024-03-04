@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 2998626111925600466}
   - component: {fileID: 6591316320726877588}
   - component: {fileID: 5721637024086140739}
-  - component: {fileID: -6823538707929744138}
+  - component: {fileID: 3343842031761741861}
   m_Layer: 6
-  m_Name: Obstacle
+  m_Name: ObstacleCoin
   m_TagString: Destructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 05408a19b921942409b08715d68efa9e, type: 2}
+  - {fileID: 2100000, guid: f14a3ab6fddfe994388c533d7744c24d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravityMultiplier: 3
---- !u!114 &-6823538707929744138
+--- !u!114 &3343842031761741861
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -171,6 +171,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7827881210908504797}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d7528b56c359c348981303faa281a51, type: 3}
+  m_Script: {fileID: 11500000, guid: 4ab1a064d5295ed49a9494872350dbdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -152,13 +152,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49decb84613753641bb3aa04f41ca79c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveIntervalMin: 1
-  waveIntervalMax: 4
-  obstaclesPerWaveMin: 20
-  obstaclesPerWaveMax: 61
+  waveIntervalMin: 4
+  waveIntervalMax: 8
+  obstaclesPerWaveMin: 10
+  obstaclesPerWaveMax: 30
   spawnZoneMaxXMagnitude: 10
   obstaclePrefab: {fileID: 7827881210908504797, guid: 5d70c74559aa05a44b217e10fbeab499, type: 3}
+  coinPrefab: {fileID: 7827881210908504797, guid: d51d210383f8fc7459c20f7aed6afe57, type: 3}
   spawnZoneZPosition: 100
+  coinChance: 0.5
 --- !u!4 &202409917
 Transform:
   m_ObjectHideFlags: 0
@@ -168,7 +170,51 @@ Transform:
   m_GameObject: {fileID: 202409915}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.3898269, y: 4.4175854, z: -2.3273766}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &482195021
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 482195023}
+  - component: {fileID: 482195022}
+  m_Layer: 0
+  m_Name: CoinManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &482195022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482195021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2226af439c4b2544a4a78eb40e59eb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &482195023
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482195021}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -477,8 +523,8 @@ GameObject:
   - component: {fileID: 1029097430}
   - component: {fileID: 1029097429}
   - component: {fileID: 1029097428}
-  - component: {fileID: 1029097432}
   - component: {fileID: 1029097433}
+  - component: {fileID: 1029097432}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -587,11 +633,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9fdf23736dba04d9a374be46d5392e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  moveSpeed: 15
   stoppingTime: 0.2
-  jumpForceMultiplier: 30
+  jumpForceMultiplier: 40
   gravityMultiplier: 10
   jumpCooldown: 0.1
+  atkCooldown: 0.4
+  bulletHeightFromFeet: 1
+  moveXMin: -10
+  moveXMax: 10
+  bulletPrefab: {fileID: 5197768659681181758, guid: db76371505576fa44a33eeb54c322133, type: 3}
 --- !u!54 &1029097433
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -734,3 +785,4 @@ SceneRoots:
   - {fileID: 1081566653}
   - {fileID: 1029097431}
   - {fileID: 202409917}
+  - {fileID: 482195023}
