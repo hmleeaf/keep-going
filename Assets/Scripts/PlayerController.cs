@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float playableAreaMin = -10f;
     [SerializeField] float playableAreaMax = 10f;
     [SerializeField] GameObject bulletPrefab;
+    [SerializeField] float cursorPlaneY;
 
     Rigidbody rb;
     TrailRenderer trailRenderer;
@@ -25,6 +26,7 @@ public class PlayerController : MonoBehaviour
     float lastDashTime = float.MinValue;
     Vector3 moveDir = Vector3.zero;
     Vector3 dashDir = Vector3.zero;
+    Plane cursorPlane;
 
     private void Start()
     {
@@ -37,6 +39,8 @@ public class PlayerController : MonoBehaviour
         input = new PlayerInput();
         input.Enable();
         input.Player.Enable();
+
+        cursorPlane = new Plane(Vector3.up, -cursorPlaneY);
     }
 
     private void OnDisable()
@@ -59,11 +63,9 @@ public class PlayerController : MonoBehaviour
     private void RaycastMouse()
     {
         Ray mouseRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        LayerMask mouseMask = 1 << LayerMask.NameToLayer("CursorPlane");
-        RaycastHit hit;
-        if (Physics.Raycast(mouseRay, out hit, 50f, mouseMask, QueryTriggerInteraction.Collide))
+        if (cursorPlane.Raycast(mouseRay, out float enter))
         {
-            mouseWorldPoint = hit.point;
+            mouseWorldPoint = mouseRay.GetPoint(enter);
         }
     }
     
@@ -112,7 +114,7 @@ public class PlayerController : MonoBehaviour
                 transform.position.y + bulletHeightFromFeet,
                 transform.position.z
             );
-            obj.transform.forward = transform.forward;
+            obj.GetComponent<Rigidbody>().velocity = transform.forward;
         }
     }
 
