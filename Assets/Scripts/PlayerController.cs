@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     Vector3 moveDir = Vector3.zero;
     Vector3 dashDir = Vector3.zero;
     Plane cursorPlane;
+    bool isInverseMovementControls = false;
 
     private void Start()
     {
@@ -77,7 +78,14 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         Vector2 moveInput = input.Player.Move.ReadValue<Vector2>();
-        moveDir = new Vector3(moveInput.x, 0, moveInput.y);
+        if (isInverseMovementControls)
+        {
+            moveDir = new Vector3(-moveInput.x, 0, -moveInput.y);
+        } 
+        else
+        {
+            moveDir = new Vector3(moveInput.x, 0, moveInput.y);
+        }
         moveDir.Normalize();
         rb.velocity = Vector3.ClampMagnitude(rb.velocity + moveDir * moveSpeed, Mathf.Max(rb.velocity.magnitude, moveSpeed));
     }
@@ -136,5 +144,10 @@ public class PlayerController : MonoBehaviour
         {
             Gizmos.DrawSphere(mouseWorldPoint, 1f);
         }
+    }
+
+    public void TransitionGameState()
+    {
+        isInverseMovementControls = true;
     }
 }

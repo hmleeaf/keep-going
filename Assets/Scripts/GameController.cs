@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static GameController;
 
 public class GameController : MonoBehaviour
 {
     [Header("Player")]
     [SerializeField] PlayerController playerController;
+
+    [Header("Camera")]
+    [SerializeField] GameObject HyruleCamera;
+    [SerializeField] GameObject LoruleCamera;
 
     [Header("Smoothing")]
     [SerializeField, Range(0f, 1f)] float smoothingFactor = 0.5f;
@@ -28,22 +33,39 @@ public class GameController : MonoBehaviour
     [SerializeField] float chaserNaturalProgressionRate = 5f;
 
     float progress = 0;
-    float chaserProgress = 0;
-    Vector3 initialCameraPosition;
+    Vector3 initialHyruleCameraPos;
+    Vector3 initialLoruleCameraPos;
     Vector3 initialChaserPosition;
     int wavesSpawned = 0;
     int groundsSpawned = 0;
 
+    public enum GameState
+    {
+        Hyrule, 
+        Lorule
+    }
+    GameState gameState = GameState.Hyrule;
+
+    GameObject ActiveCamera => gameState == GameState.Hyrule ? HyruleCamera : LoruleCamera;
+    Vector3 ActiveCameraInitialPos => gameState == GameState.Hyrule ? initialHyruleCameraPos : initialLoruleCameraPos;
+
     private void Start()
     {
-        initialCameraPosition = Camera.main.transform.position;
+        initialHyruleCameraPos = HyruleCamera.transform.position;
+        initialLoruleCameraPos = LoruleCamera.transform.position;
         initialChaserPosition = chaser.transform.position;
+    }
+
+    private void OnEnable()
+    {
+        gameState = GameState.Hyrule;
+        HyruleCamera.SetActive(true);
+        LoruleCamera.SetActive(false);
     }
 
     private void Update()
     {
         CalcProgress();
-
         UpdateCamZ();
         GenerateWave();
         GenerateGround();
@@ -52,14 +74,22 @@ public class GameController : MonoBehaviour
 
     void CalcProgress()
     {
-        progress = Mathf.Max(progress, playerController.transform.position.z);
+        switch (gameState)
+        {
+            case GameState.Hyrule:
+                progress = Mathf.Max(progress, playerController.transform.position.z);
+                break;
+            case GameState.Lorule:
+                progress = Mathf.Min(progress, playerController.transform.position.z);
+                break;
+        }
     }
 
     void UpdateCamZ()
     {
-        Vector3 newCamPos = initialCameraPosition + Vector3.forward * progress;
-        float distance = Vector3.Distance(Camera.main.transform.position, newCamPos);
-        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, newCamPos, 1/distance);
+        Vector3 newCamPos = ActiveCameraInitialPos + Vector3.forward * progress;
+        float distance = Vector3.Distance(ActiveCamera.transform.position, newCamPos);
+        ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, newCamPos, 1/distance);
     }
 
     void GenerateWave()
@@ -99,8 +129,18 @@ public class GameController : MonoBehaviour
 
     }
 
-    public void TransitionToAbberation()
+    public void TransitionToLorule()
     {
-        Debug.Log("Transitioning");
+        chaser.SetActive(false);
+        LoruleCamera.transform.position = initialLoruleCameraPos + Vector3.forward * progress;
+        LoruleCamera.SetActive(true);
+        HyruleCamera.SetActive(false);
+        playerController.TransitionGameState();
+        gameState = GameState.Lorule;
+    }
+
+    public void TransitionToEnding()
+    {
+        Debug.Log("Ending triggered");
     }
 }
