@@ -463,6 +463,69 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 632925546}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &690069902
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 690069904}
+  - component: {fileID: 690069903}
+  m_Layer: 0
+  m_Name: NavMeshSurface
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &690069903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690069902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 520
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 0}
+  m_BuildHeightMesh: 0
+--- !u!4 &690069904
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690069902}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,8 +753,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 951663437}
-  m_Layer: 0
-  m_Name: Grounds
+  m_Layer: 3
+  m_Name: GroundsContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1594,7 +1657,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1805021002}
   m_Layer: 0
-  m_Name: Waves
+  m_Name: WavesContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1845,7 +1908,7 @@ MonoBehaviour:
   LoruleCamera: {fileID: 974104314}
   smoothingFactor: 0.5
   pregenDistance: 50
-  waves:
+  wavesPrefabs:
   - {fileID: 6276200097862105780, guid: aa7aed2e983af2b429eb980c504ecb0f, type: 3}
   - {fileID: 2167383461522041790, guid: bb9db770a5b067e4cb767eac48f34005, type: 3}
   - {fileID: 2551386151066849692, guid: ae4d78e1be58ff94bb2fc7a1d99e35ac, type: 3}
@@ -1856,6 +1919,9 @@ MonoBehaviour:
   groundsContainer: {fileID: 951663437}
   chaser: {fileID: 1433214638}
   chaserNaturalProgressionRate: 1
+  navMeshSurface: {fileID: 690069903}
+  enemyPrefab: {fileID: 1318540124296002471, guid: 76ba989432885714f9eed40209f7c232, type: 3}
+  enemyChance: 1
 --- !u!4 &2137233359
 Transform:
   m_ObjectHideFlags: 0
@@ -1942,3 +2008,4 @@ SceneRoots:
   - {fileID: 951663437}
   - {fileID: 1433214642}
   - {fileID: 2091136780}
+  - {fileID: 690069904}

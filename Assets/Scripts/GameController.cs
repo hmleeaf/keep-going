@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
+using UnityEditor.AI;
 using UnityEngine;
 using static GameController;
 
@@ -19,7 +21,7 @@ public class GameController : MonoBehaviour
     [SerializeField] float pregenDistance = 30f;
 
     [Header("Waves")]
-    [SerializeField] List<GameObject> waves;
+    [SerializeField] List<GameObject> wavesPrefabs;
     [SerializeField] float wavesGap = 10f;
     [SerializeField] Transform wavesContainer;
 
@@ -32,12 +34,20 @@ public class GameController : MonoBehaviour
     [SerializeField] GameObject chaser;
     [SerializeField] float chaserNaturalProgressionRate = 5f;
 
+    [Header("AI")]
+    [SerializeField] NavMeshSurface navMeshSurface;
+
+    [Header("Enemy")]
+    [SerializeField] GameObject enemyPrefab;
+    [SerializeField, Range(0f, 1f)] float enemyChance = 0.25f;
+
     float progress = 0;
     Vector3 initialHyruleCameraPos;
     Vector3 initialLoruleCameraPos;
     Vector3 initialChaserPosition;
     int wavesSpawned = 0;
     int groundsSpawned = 0;
+    List<GameObject> waves = new List<GameObject>();
 
     public enum GameState
     {
@@ -96,7 +106,8 @@ public class GameController : MonoBehaviour
     {
         while (wavesSpawned * wavesGap < progress + pregenDistance)
         {
-            SpawnPrefab(waves[Random.Range(0, waves.Count)], ++wavesSpawned * wavesGap, wavesContainer);
+            GameObject obj = SpawnPrefab(wavesPrefabs[Random.Range(0, wavesPrefabs.Count)], ++wavesSpawned * wavesGap, wavesContainer);
+            waves.Add(obj);
         }
     }
 
@@ -108,7 +119,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    void SpawnPrefab(GameObject prefab, float zOffset, Transform parent)
+    GameObject SpawnPrefab(GameObject prefab, float zOffset, Transform parent)
     {
         GameObject obj = Instantiate(prefab);
         obj.transform.position += Vector3.forward * zOffset;
@@ -116,6 +127,7 @@ public class GameController : MonoBehaviour
         {
             obj.transform.SetParent(parent);
         }
+        return obj;
     }
 
     void UpdateChaser()
@@ -137,6 +149,31 @@ public class GameController : MonoBehaviour
         HyruleCamera.SetActive(false);
         playerController.TransitionGameState();
         gameState = GameState.Lorule;
+
+        BuildNavMesh();
+        SpawnEnemies();
+    }
+
+    void BuildNavMesh()
+    {
+        navMeshSurface.BuildNavMesh();
+    }
+
+    void SpawnEnemies()
+    {
+        for (int i = 0; i < waves.Count - 3; i++)
+        {
+            if (Random.value < enemyChance)
+            {
+                SpawnEnemy(i);
+            }
+        }
+    }
+
+    void SpawnEnemy(int waveIdx)
+    {
+        GameObject enemyObj = Instantiate(enemyPrefab);
+        enemyObj.transform.position = enemyPrefab.transform.position + Vector3.forward * (waveIdx * wavesGap + wavesGap * 0.5f);
     }
 
     public void TransitionToEnding()
