@@ -161,6 +161,9 @@ public class GameController : MonoBehaviour
         GameObject enemyObj = Instantiate(enemyPrefab);
         enemyObj.transform.position = enemyPrefab.transform.position + Vector3.forward * (wave.BoundsMin.z + enemySpawnDistanceFromWall);
         wave.SetBarriersActive(true);
+        Enemy enemy = enemyObj.GetComponent<Enemy>();
+        wave.AddEnemy(enemy);
+        enemy.SetWave(wave);
     }
 
     public void TransitionToEnding()

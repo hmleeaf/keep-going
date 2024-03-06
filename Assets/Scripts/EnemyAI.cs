@@ -79,11 +79,6 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    public void Damage()
-    {
-        Debug.Log("Enemy damaged");
-    }
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.white;
