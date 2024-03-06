@@ -18,17 +18,12 @@ public class GameController : MonoBehaviour
     [SerializeField, Range(0f, 1f)] float smoothingFactor = 0.5f;
 
     [Header("Pre-generation")]
-    [SerializeField] float pregenDistance = 30f;
+    [SerializeField] float pregenDistance = 50f;
 
     [Header("Waves")]
     [SerializeField] List<GameObject> wavesPrefabs;
-    [SerializeField] float wavesGap = 10f;
+    [SerializeField] float waveZSize = 60f;
     [SerializeField] Transform wavesContainer;
-
-    [Header("Ground")]
-    [SerializeField] GameObject groundPrefab;
-    [SerializeField] float groundLength;
-    [SerializeField] Transform groundsContainer;
 
     [Header("Chaser")]
     [SerializeField] GameObject chaser;
@@ -40,14 +35,13 @@ public class GameController : MonoBehaviour
     [Header("Enemy")]
     [SerializeField] GameObject enemyPrefab;
     [SerializeField, Range(0f, 1f)] float enemyChance = 0.25f;
+    [SerializeField] float enemySpawnDistanceFromWall = 10f;
 
     float progress = 0;
     Vector3 initialHyruleCameraPos;
     Vector3 initialLoruleCameraPos;
     Vector3 initialChaserPosition;
-    int wavesSpawned = 0;
-    int groundsSpawned = 0;
-    List<GameObject> waves = new List<GameObject>();
+    List<Wave> waves = new List<Wave>();
 
     public enum GameState
     {
@@ -78,7 +72,6 @@ public class GameController : MonoBehaviour
         CalcProgress();
         UpdateCamZ();
         GenerateWave();
-        GenerateGround();
         UpdateChaser();
     }
 
@@ -104,18 +97,10 @@ public class GameController : MonoBehaviour
 
     void GenerateWave()
     {
-        while (wavesSpawned * wavesGap < progress + pregenDistance)
+        while (waves.Count * waveZSize < progress + pregenDistance)
         {
-            GameObject obj = SpawnPrefab(wavesPrefabs[Random.Range(0, wavesPrefabs.Count)], ++wavesSpawned * wavesGap, wavesContainer);
-            waves.Add(obj);
-        }
-    }
-
-    void GenerateGround()
-    {
-        while (groundsSpawned * groundLength < progress + pregenDistance)
-        {
-            SpawnPrefab(groundPrefab, ++groundsSpawned * groundLength, groundsContainer);
+            GameObject obj = SpawnPrefab(wavesPrefabs[Random.Range(0, wavesPrefabs.Count)], (waves.Count + 1) * waveZSize, wavesContainer);
+            waves.Add(obj.GetComponent<Wave>());
         }
     }
 
@@ -161,19 +146,21 @@ public class GameController : MonoBehaviour
 
     void SpawnEnemies()
     {
-        for (int i = 0; i < waves.Count - 3; i++)
+        for (int i = 0; i < waves.Count - 2; i++)
         {
             if (Random.value < enemyChance)
             {
-                SpawnEnemy(i);
+                SetupHostileWave(i);
             }
         }
     }
 
-    void SpawnEnemy(int waveIdx)
+    void SetupHostileWave(int waveIdx)
     {
+        Wave wave = waves[waveIdx];
         GameObject enemyObj = Instantiate(enemyPrefab);
-        enemyObj.transform.position = enemyPrefab.transform.position + Vector3.forward * (waveIdx * wavesGap + wavesGap * 0.5f);
+        enemyObj.transform.position = enemyPrefab.transform.position + Vector3.forward * (wave.BoundsMin.z + enemySpawnDistanceFromWall);
+        wave.SetBarriersActive(true);
     }
 
     public void TransitionToEnding()

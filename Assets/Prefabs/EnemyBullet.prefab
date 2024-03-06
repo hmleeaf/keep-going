@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 5586071357463413472}
   - component: {fileID: 3790234057539434677}
   - component: {fileID: 7168480888046089893}
-  - component: {fileID: -6162740791558024660}
-  m_Layer: 7
-  m_Name: Bullet
+  - component: {fileID: -8932501603809121882}
+  m_Layer: 11
+  m_Name: EnemyBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d6e3b9e5a71729142830b2bee9a8d419, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -160,8 +160,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 0}
+      key0: {r: 0.745283, g: 0.21444462, b: 0.21444462, a: 1}
+      key1: {r: 0.74509805, g: 0.21568629, b: 0.21568629, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -248,7 +248,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &-6162740791558024660
+--- !u!114 &-8932501603809121882
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

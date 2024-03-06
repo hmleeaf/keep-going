@@ -138,16 +138,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        if (Application.isPlaying)
-        {
-            Gizmos.DrawSphere(mouseWorldPoint, 1f);
-        }
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    if (Application.isPlaying)
+    //    {
+    //        Gizmos.DrawSphere(mouseWorldPoint, 1f);
+    //    }
+    //}
 
     public void TransitionGameState()
     {
         isInverseMovementControls = true;
     }
+
+    public void Damage()
+    {
+        Debug.Log("Player damaged");
+    }
+
 }

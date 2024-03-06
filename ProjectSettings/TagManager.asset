@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Destructible
   - Wall
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -13,12 +14,12 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - Enemy
   - Bullet
   - Player
   - Wall
   - Bounds
-  - 
+  - Enemy Bullet
   - 
   - 
   - 
