@@ -37,11 +37,19 @@ public class GameController : MonoBehaviour
     [SerializeField, Range(0f, 1f)] float enemyChance = 0.25f;
     [SerializeField] float enemySpawnDistanceFromWall = 10f;
 
+    [Header("Ambient Text")]
+    [SerializeField] GameObject ambientTextPrefab;
+    [SerializeField] float ambientTextXMin = -10f;
+    [SerializeField] float ambientTextXMax = 10f;
+    [SerializeField] float ambientTextY = 4f;
+    [SerializeField] float ambientTextZInterval = 30f;
+
     float progress = 0;
     Vector3 initialHyruleCameraPos;
     Vector3 initialLoruleCameraPos;
     Vector3 initialChaserPosition;
     List<WaveInfo> waves = new List<WaveInfo>();
+    List<AmbientText> ambientTexts = new List<AmbientText>();
 
     class WaveInfo
     {
@@ -80,6 +88,7 @@ public class GameController : MonoBehaviour
         GenerateWave();
         UpdateChaser();
         CheckEnemies();
+        UpdateAmbientText();
     }
 
     void CalcProgress()
@@ -186,6 +195,21 @@ public class GameController : MonoBehaviour
                     waveInfo.wave.SetBarriersActive(false);
                 }
             }
+        }
+    }
+
+    void UpdateAmbientText()
+    {
+        if (ambientTexts.Count * ambientTextZInterval < progress)
+        {
+            GameObject ambientTextObj = Instantiate(ambientTextPrefab);
+            ambientTextObj.transform.position = new Vector3(
+                ambientTexts.Count % 2 == 0 ? ambientTextXMin : ambientTextXMax, 
+                ambientTextY, 
+                (ambientTexts.Count + 1) * ambientTextZInterval
+            );
+            AmbientText ambientText = ambientTextObj.GetComponent<AmbientText>();
+            ambientTexts.Add(ambientText);
         }
     }
 

@@ -1825,7 +1825,7 @@ GameObject:
   - component: {fileID: 1814742498}
   - component: {fileID: 1814742497}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: HUD Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2092,6 +2092,11 @@ MonoBehaviour:
   enemyPrefab: {fileID: 1318540124296002471, guid: 76ba989432885714f9eed40209f7c232, type: 3}
   enemyChance: 1
   enemySpawnDistanceFromWall: 10
+  ambientTextPrefab: {fileID: 412528564088269546, guid: 51f816d3360418e4297250dd6746d576, type: 3}
+  ambientTextXMin: -10
+  ambientTextXMax: 10
+  ambientTextY: 4
+  ambientTextZInterval: 30
 --- !u!4 &2137233359
 Transform:
   m_ObjectHideFlags: 0
