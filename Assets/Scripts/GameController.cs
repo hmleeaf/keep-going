@@ -47,6 +47,10 @@ public class GameController : MonoBehaviour
     [SerializeField] float ambientTextSpawnInterval = 1f;
     [SerializeField] float ambientTextSpawnChance = 1f;
 
+    [Header("Tutorial")]
+    [SerializeField] float tutorialLength = 60f;
+    [SerializeField] GameObject tutorialObject;
+
     float progress = 0;
     Vector3 initialHyruleCameraPos;
     Vector3 initialLoruleCameraPos;
@@ -120,9 +124,9 @@ public class GameController : MonoBehaviour
 
     void GenerateWave()
     {
-        while (waves.Count * waveZSize < progress + pregenDistance)
+        while (waves.Count * waveZSize + tutorialLength < progress + pregenDistance)
         {
-            GameObject obj = SpawnPrefab(wavesPrefabs[Random.Range(0, wavesPrefabs.Count)], (waves.Count + 1) * waveZSize, wavesContainer);
+            GameObject obj = SpawnPrefab(wavesPrefabs[Random.Range(0, wavesPrefabs.Count)], (waves.Count + 1) * waveZSize - waveZSize / 2 + tutorialLength, wavesContainer);
             WaveInfo waveInfo = new WaveInfo();
             waveInfo.wave = obj.GetComponent<Wave>();
             waves.Add(waveInfo);
@@ -159,9 +163,19 @@ public class GameController : MonoBehaviour
         HyruleCamera.SetActive(false);
         playerController.TransitionGameState();
         gameState = GameState.Lorule;
+        tutorialObject.SetActive(false);
 
+        DeactivateCrates();
         BuildNavMesh();
         SpawnEnemies();
+    }
+
+    void DeactivateCrates()
+    {
+        foreach (WaveInfo wave in waves)
+        {
+            wave.wave.SetCratesActive(false);
+        }
     }
 
     void BuildNavMesh()
@@ -207,6 +221,9 @@ public class GameController : MonoBehaviour
 
     void UpdateAmbientText()
     {
+        // don't spawn ambient texts during tutorial
+        if (progress < tutorialLength && gameState == GameState.Hyrule) return;
+
         if (Time.time > lastAmbientTextSpawnTime + ambientTextSpawnInterval)
         {
             lastAmbientTextSpawnTime = Time.time;

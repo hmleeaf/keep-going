@@ -10,6 +10,7 @@ public class AmbientText : MonoBehaviour
     [SerializeField] float fadeInTime = 1f;
     [SerializeField] float holdTime = 1f;
     [SerializeField] float fadeOutTime = 1f;
+    [SerializeField] bool stays = false;
 
     CinemachineBrain cinemachineBrain;
     float lifetime;
@@ -29,7 +30,11 @@ public class AmbientText : MonoBehaviour
     {
         transform.forward = cinemachineBrain.ActiveVirtualCamera.VirtualCameraGameObject.transform.forward;
         lifetime += Time.deltaTime;
-        if (lifetime < fadeInTime)
+        if (lifetime > fadeInTime && stays)
+        {
+            text.alpha = 1f;
+        } 
+        else if (lifetime < fadeInTime)
         {
             text.alpha = Mathf.Lerp(0f, 1f, lifetime / fadeInTime);
         }

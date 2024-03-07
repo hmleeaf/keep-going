@@ -119,6 +119,7 @@ MonoBehaviour:
   fadeInTime: 1
   holdTime: 2
   fadeOutTime: 1
+  stays: 0
 --- !u!1 &1282552016887369550
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,7 +219,7 @@ MonoBehaviour:
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 1
-  m_fontSizeMax: 4
+  m_fontSizeMax: 2
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512

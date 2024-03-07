@@ -5,6 +5,7 @@ using UnityEngine;
 public class Wave : MonoBehaviour
 {
     [SerializeField] List<GameObject> barriers = new List<GameObject>();
+    [SerializeField] List<GameObject> crates = new List<GameObject>();
     [SerializeField] Vector3 localBoundsMin;
     [SerializeField] Vector3 localBoundsMax;
 
@@ -22,6 +23,17 @@ public class Wave : MonoBehaviour
         foreach (GameObject barrier in barriers)
         {
             barrier.SetActive(active);
+        }
+    }
+    
+    public void SetCratesActive(bool active)
+    {
+        foreach (GameObject crate in crates)
+        {
+            if (crate != null)
+            {
+                crate.SetActive(active);
+            }
         }
     }
 }
