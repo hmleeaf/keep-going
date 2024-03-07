@@ -28,11 +28,13 @@ public class PlayerController : MonoBehaviour
     Vector3 dashDir = Vector3.zero;
     Plane cursorPlane;
     bool isInverseMovementControls = false;
+    Entity playerEntity;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         trailRenderer = GetComponent<TrailRenderer>();
+        playerEntity = GetComponent<Entity>();
     }
 
     void OnEnable()
@@ -59,6 +61,7 @@ public class PlayerController : MonoBehaviour
         ClampToPlayableArea();
         Attack();
         Trail();
+        CheckHealth();
     }
 
     private void RaycastMouse()
@@ -138,6 +141,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void CheckHealth()
+    {
+        if (playerEntity.Health <= 0)
+        {
+            Debug.Log("player dead");
+        }
+    }
+
     //private void OnDrawGizmos()
     //{
     //    if (Application.isPlaying)
@@ -151,9 +162,5 @@ public class PlayerController : MonoBehaviour
         isInverseMovementControls = true;
     }
 
-    public void Damage()
-    {
-        Debug.Log("Player damaged");
-    }
-
+    
 }

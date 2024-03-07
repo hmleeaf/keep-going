@@ -46,7 +46,7 @@ public class GameController : MonoBehaviour
     class WaveInfo
     {
         public Wave wave;
-        public Enemy enemy;
+        public Entity enemy;
     }
 
     public enum GameState
@@ -170,7 +170,7 @@ public class GameController : MonoBehaviour
         GameObject enemyObj = Instantiate(enemyPrefab);
         enemyObj.transform.position = enemyPrefab.transform.position + Vector3.forward * (waveInfo.wave.BoundsMin.z + enemySpawnDistanceFromWall);
         waveInfo.wave.SetBarriersActive(true);
-        waveInfo.enemy = enemyObj.GetComponent<Enemy>();
+        waveInfo.enemy = enemyObj.GetComponent<Entity>();
     }
 
     void CheckEnemies()
