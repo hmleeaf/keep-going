@@ -41,7 +41,13 @@ public class GameController : MonoBehaviour
     Vector3 initialHyruleCameraPos;
     Vector3 initialLoruleCameraPos;
     Vector3 initialChaserPosition;
-    List<Wave> waves = new List<Wave>();
+    List<WaveInfo> waves = new List<WaveInfo>();
+
+    class WaveInfo
+    {
+        public Wave wave;
+        public Enemy enemy;
+    }
 
     public enum GameState
     {
@@ -73,6 +79,7 @@ public class GameController : MonoBehaviour
         UpdateCamZ();
         GenerateWave();
         UpdateChaser();
+        CheckEnemies();
     }
 
     void CalcProgress()
@@ -100,7 +107,9 @@ public class GameController : MonoBehaviour
         while (waves.Count * waveZSize < progress + pregenDistance)
         {
             GameObject obj = SpawnPrefab(wavesPrefabs[Random.Range(0, wavesPrefabs.Count)], (waves.Count + 1) * waveZSize, wavesContainer);
-            waves.Add(obj.GetComponent<Wave>());
+            WaveInfo waveInfo = new WaveInfo();
+            waveInfo.wave = obj.GetComponent<Wave>();
+            waves.Add(waveInfo);
         }
     }
 
@@ -157,13 +166,27 @@ public class GameController : MonoBehaviour
 
     void SetupHostileWave(int waveIdx)
     {
-        Wave wave = waves[waveIdx];
+        WaveInfo waveInfo = waves[waveIdx];
         GameObject enemyObj = Instantiate(enemyPrefab);
-        enemyObj.transform.position = enemyPrefab.transform.position + Vector3.forward * (wave.BoundsMin.z + enemySpawnDistanceFromWall);
-        wave.SetBarriersActive(true);
-        Enemy enemy = enemyObj.GetComponent<Enemy>();
-        wave.AddEnemy(enemy);
-        enemy.SetWave(wave);
+        enemyObj.transform.position = enemyPrefab.transform.position + Vector3.forward * (waveInfo.wave.BoundsMin.z + enemySpawnDistanceFromWall);
+        waveInfo.wave.SetBarriersActive(true);
+        waveInfo.enemy = enemyObj.GetComponent<Enemy>();
+    }
+
+    void CheckEnemies()
+    {
+        if (gameState == GameState.Lorule)
+        {
+            foreach (WaveInfo waveInfo in waves)
+            {
+                if (waveInfo.enemy && waveInfo.enemy.Health <= 0)
+                {
+                    Destroy(waveInfo.enemy.gameObject);
+                    waveInfo.enemy = null;
+                    waveInfo.wave.SetBarriersActive(false);
+                }
+            }
+        }
     }
 
     public void TransitionToEnding()
