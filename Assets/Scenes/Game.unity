@@ -2096,7 +2096,9 @@ MonoBehaviour:
   ambientTextXMin: -10
   ambientTextXMax: 10
   ambientTextY: 4
-  ambientTextZInterval: 30
+  ambientTextZSpawnZoneFromTop: 0.5
+  ambientTextSpawnInterval: 2.5
+  ambientTextSpawnChance: 1
 --- !u!4 &2137233359
 Transform:
   m_ObjectHideFlags: 0

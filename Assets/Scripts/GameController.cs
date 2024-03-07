@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
@@ -42,7 +43,9 @@ public class GameController : MonoBehaviour
     [SerializeField] float ambientTextXMin = -10f;
     [SerializeField] float ambientTextXMax = 10f;
     [SerializeField] float ambientTextY = 4f;
-    [SerializeField] float ambientTextZInterval = 30f;
+    [SerializeField, Range(0f, 1f)] float ambientTextZSpawnZoneFromTop = 0.5f;
+    [SerializeField] float ambientTextSpawnInterval = 1f;
+    [SerializeField] float ambientTextSpawnChance = 1f;
 
     float progress = 0;
     Vector3 initialHyruleCameraPos;
@@ -50,6 +53,8 @@ public class GameController : MonoBehaviour
     Vector3 initialChaserPosition;
     List<WaveInfo> waves = new List<WaveInfo>();
     List<AmbientText> ambientTexts = new List<AmbientText>();
+    Vector2 ambientZRange;
+    float lastAmbientTextSpawnTime = float.MinValue;
 
     class WaveInfo
     {
@@ -79,6 +84,8 @@ public class GameController : MonoBehaviour
         gameState = GameState.Hyrule;
         HyruleCamera.SetActive(true);
         LoruleCamera.SetActive(false);
+
+        CalculateAmbientZRange();
     }
 
     private void Update()
@@ -200,18 +207,42 @@ public class GameController : MonoBehaviour
 
     void UpdateAmbientText()
     {
-        if (ambientTexts.Count * ambientTextZInterval < progress)
+        if (Time.time > lastAmbientTextSpawnTime + ambientTextSpawnInterval)
         {
-            GameObject ambientTextObj = Instantiate(ambientTextPrefab);
-            ambientTextObj.transform.position = new Vector3(
-                ambientTexts.Count % 2 == 0 ? ambientTextXMin : ambientTextXMax, 
-                ambientTextY, 
-                (ambientTexts.Count + 1) * ambientTextZInterval
-            );
-            AmbientText ambientText = ambientTextObj.GetComponent<AmbientText>();
-            ambientTexts.Add(ambientText);
+            lastAmbientTextSpawnTime = Time.time;
+            if (Random.value < ambientTextSpawnChance)
+            {
+                GameObject ambientTextObj = Instantiate(ambientTextPrefab);
+                ambientTextObj.transform.position = new Vector3(
+                    ambientTexts.Count % 2 == 0 ? ambientTextXMin : ambientTextXMax, 
+                    ambientTextY, 
+                    Random.Range(Mathf.Lerp(ambientZRange.y, ambientZRange.x, ambientTextZSpawnZoneFromTop), ambientZRange.y) + Camera.main.transform.position.z
+                );
+                AmbientText ambientText = ambientTextObj.GetComponent<AmbientText>();
+                ambientTexts.Add(ambientText);
+            }
         }
     }
+
+    void CalculateAmbientZRange()
+    {
+        Ray bottomMiddleRay = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, 0, 0));
+        Ray topMiddleRay = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height - 1, 0));
+        Plane textPlane = new Plane(Vector3.up, -ambientTextY);
+        textPlane.Raycast(bottomMiddleRay, out float bottomEnter);
+        textPlane.Raycast(topMiddleRay, out float topEnter);
+        ambientZRange = new Vector2(
+            bottomMiddleRay.GetPoint(bottomEnter).z,
+            topMiddleRay.GetPoint(topEnter).z
+        ) - Vector2.one * Camera.main.transform.position.z;
+    }
+
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawSphere(new Vector3(0, ambientTextY, ambientZRange.x + Camera.main.transform.position.z), 1f);
+    //    Gizmos.DrawSphere(new Vector3(0, ambientTextY, ambientZRange.y + Camera.main.transform.position.z), 1f);
+    //}
 
     public void TransitionToEnding()
     {
