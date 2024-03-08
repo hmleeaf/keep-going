@@ -10,7 +10,7 @@ public class Entity : MonoBehaviour
     [SerializeField] float autoRegenTick = 0.2f;
     [SerializeField] float autoRegenWait = 1f;
 
-    public int health;
+    int health;
     public int Health { get { return health; } }
     public int MaxHp { get { return maxHp; } }
 

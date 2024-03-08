@@ -20,12 +20,14 @@ public class EnemyAI : MonoBehaviour
     Vector3 destination;
     float lastAttackTime = float.MinValue;
     float lastMoveTime = float.MinValue;
+    Entity entity;
 
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         playerController = FindObjectOfType<PlayerController>();
+        entity = GetComponent<Entity>();
     }
 
     private void OnEnable()
@@ -36,6 +38,11 @@ public class EnemyAI : MonoBehaviour
     private void Update()
     {
         if (!aggroed && Vector3.Distance(transform.position, playerController.transform.position) < aggroRadius)
+        {
+            aggroed = true;
+        }
+
+        if (entity.Health < entity.MaxHp)
         {
             aggroed = true;
         }
