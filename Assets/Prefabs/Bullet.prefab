@@ -264,3 +264,4 @@ MonoBehaviour:
   boundsMin: -10
   boundsMax: 10
   velocityMagnitude: 40
+  damage: 40

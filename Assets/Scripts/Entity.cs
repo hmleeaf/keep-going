@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
-    [SerializeField] int maxHp = 3;
+    [SerializeField] int maxHp = 100;
 
     int health;
     public int Health { get { return health; } }
@@ -15,8 +15,8 @@ public class Entity : MonoBehaviour
         health = maxHp;
     }
 
-    public void Damage()
+    public void Damage(int damage)
     {
-        health--;
+        health -= damage;
     }
 }

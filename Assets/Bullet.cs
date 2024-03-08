@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] float boundsMin = -10f;
     [SerializeField] float boundsMax = 10f;
     [SerializeField] float velocityMagnitude = 40f;
+    [SerializeField] int damage = 20;
 
     Rigidbody rb;
     int bounceCount = 0;
@@ -29,7 +30,7 @@ public class Bullet : MonoBehaviour
         Entity entity = collision.collider.gameObject.GetComponent<Entity>();
         if (entity)
         {
-            entity.Damage();
+            entity.Damage(damage);
             Destroy(gameObject);
         }
 
