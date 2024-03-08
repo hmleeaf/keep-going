@@ -200,6 +200,11 @@ public class GameController : MonoBehaviour
                 Destroy(coin.gameObject);
             }
         }
+        foreach (AmbientText ambientText in ambientTexts)
+        {
+            Destroy(ambientText.gameObject);
+        }
+        ambientTexts.Clear();
 
         DeactivateCrates();
         BuildNavMesh();
@@ -318,8 +323,8 @@ public class GameController : MonoBehaviour
                 GameObject ambientTextObj = Instantiate(ambientTextPrefab);
                 ambientTextObj.transform.position = new Vector3(
                     ambientTexts.Count % 2 == 0 ? ambientTextXMin : ambientTextXMax, 
-                    ambientTextY, 
-                    Random.Range(Mathf.Lerp(ambientZRange.y, ambientZRange.x, ambientTextZSpawnZoneFromTop), ambientZRange.y) + Camera.main.transform.position.z
+                    ambientTextY,
+                    Camera.main.transform.position.z + Random.Range(Mathf.Lerp(ambientZRange.y, ambientZRange.x, ambientTextZSpawnZoneFromTop), ambientZRange.y) * (gameState == GameState.Lorule ? -1 : 1)
                 );
                 AmbientText ambientText = ambientTextObj.GetComponent<AmbientText>();
                 ambientTexts.Add(ambientText);
