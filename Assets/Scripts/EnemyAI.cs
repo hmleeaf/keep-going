@@ -93,10 +93,17 @@ public class EnemyAI : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.white;
-        Gizmos.DrawSphere(destination, 1f);
-        Gizmos.color = Color.black;
-        Gizmos.DrawSphere(playerController.transform.position, 1f);
+        if (destination != null)
+        {
+            Gizmos.color = Color.white;
+            Gizmos.DrawSphere(destination, 1f);
+        }
+
+        if (playerController != null)
+        {
+            Gizmos.color = Color.black;
+            Gizmos.DrawSphere(playerController.transform.position, 1f);
+        }
     }
 
     public void ResetAggro()
