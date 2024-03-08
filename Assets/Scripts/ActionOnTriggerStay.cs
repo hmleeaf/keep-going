@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ActionOnTrigger : MonoBehaviour
+public class ActionOnTriggerStay : MonoBehaviour
 {
     [SerializeField] UnityEvent action;
     [SerializeField] string otherTag;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag(otherTag))
         {

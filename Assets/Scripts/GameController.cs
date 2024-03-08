@@ -51,6 +51,9 @@ public class GameController : MonoBehaviour
     [SerializeField] float tutorialLength = 60f;
     [SerializeField] GameObject tutorialObject;
 
+    [Header("Game flow")]
+    [SerializeField] float transitionableDistance = 1200f;
+
     float progress = 0;
     Vector3 initialHyruleCameraPos;
     Vector3 initialLoruleCameraPos;
@@ -59,6 +62,9 @@ public class GameController : MonoBehaviour
     List<AmbientText> ambientTexts = new List<AmbientText>();
     Vector2 ambientZRange;
     float lastAmbientTextSpawnTime = float.MinValue;
+
+    public float Progress { get { return progress; } }
+    public float TransitionableDistance { get { return transitionableDistance; } }
 
     class WaveInfo
     {
@@ -147,7 +153,10 @@ public class GameController : MonoBehaviour
     void UpdateChaser()
     {
         Vector3 newChaserPos = initialChaserPosition + Vector3.forward * progress;
-        chaser.transform.position += Vector3.forward * chaserNaturalProgressionRate * Time.deltaTime;
+        if (!chaser.GetComponent<Chaser>().PlayerInTrigger)
+        {
+            chaser.transform.position += Vector3.forward * chaserNaturalProgressionRate * Time.deltaTime;
+        }
         if (chaser.transform.position.z < newChaserPos.z)
         {
             chaser.transform.position = newChaserPos;
