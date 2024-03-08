@@ -28,6 +28,11 @@ public class EnemyAI : MonoBehaviour
         playerController = FindObjectOfType<PlayerController>();
     }
 
+    private void OnEnable()
+    {
+        aggroed = false;
+    }
+
     private void Update()
     {
         if (!aggroed && Vector3.Distance(transform.position, playerController.transform.position) < aggroRadius)

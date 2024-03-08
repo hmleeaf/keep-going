@@ -53,6 +53,7 @@ public class GameController : MonoBehaviour
 
     [Header("Game flow")]
     [SerializeField] float transitionableDistance = 1200f;
+    [SerializeField] float transitionDuration = 5f;
 
     float progress = 0;
     Vector3 initialHyruleCameraPos;
@@ -62,6 +63,7 @@ public class GameController : MonoBehaviour
     List<AmbientText> ambientTexts = new List<AmbientText>();
     Vector2 ambientZRange;
     float lastAmbientTextSpawnTime = float.MinValue;
+    Vector3 loruleSpawn;
 
     public float Progress { get { return progress; } }
     public float TransitionableDistance { get { return transitionableDistance; } }
@@ -106,6 +108,7 @@ public class GameController : MonoBehaviour
         UpdateChaser();
         CheckEnemies();
         UpdateAmbientText();
+        CheckPlayerHealth();
     }
 
     void CalcProgress()
@@ -164,8 +167,24 @@ public class GameController : MonoBehaviour
 
     }
 
-    public void TransitionToLorule()
+    void CheckPlayerHealth()
     {
+        if (playerController.IsDead)
+        {
+            if (gameState == GameState.Hyrule && progress > transitionableDistance)
+            {
+                TransitionToLorule();
+            }
+            else
+            {
+                Respawn();
+            }
+        }
+    }
+
+    void TransitionToLorule()
+    {
+        loruleSpawn = playerController.transform.position;
         chaser.SetActive(false);
         LoruleCamera.transform.position = initialLoruleCameraPos + Vector3.forward * progress;
         LoruleCamera.SetActive(true);
@@ -177,6 +196,56 @@ public class GameController : MonoBehaviour
         DeactivateCrates();
         BuildNavMesh();
         SpawnEnemies();
+
+        playerController.DisableInput();
+        StartCoroutine(EndTransition());
+    }
+
+    IEnumerator EndTransition()
+    {
+        yield return new WaitForSeconds(transitionDuration);
+        playerController.EnableInput();
+    }
+
+    void Respawn()
+    {
+        tutorialObject.SetActive(false);
+        foreach (AmbientText ambientText in ambientTexts)
+        {
+            Destroy(ambientText.gameObject);
+        }
+        ambientTexts.Clear();
+
+        if (gameState == GameState.Hyrule)
+        {
+            foreach (WaveInfo wave in waves)
+            {
+                Destroy(wave.wave.gameObject);
+            }
+            waves.Clear();
+
+            progress = 0;
+            playerController.transform.position = new Vector3(0, 1, tutorialLength - 30f);
+            playerController.HealToFull();
+            chaser.transform.position = initialChaserPosition;
+        }
+        else
+        {
+            foreach (WaveInfo wave in waves)
+            {
+                wave.wave.SetBarriersActive(true);
+                if (wave.enemy)
+                {
+                    wave.enemy.gameObject.SetActive(true);
+                    // wave.enemy.transform.position = 
+                    wave.enemy.HealToFull();
+                }
+            }
+
+            progress = loruleSpawn.z;
+            playerController.transform.position = loruleSpawn;
+            playerController.HealToFull();
+        }
     }
 
     void DeactivateCrates()
@@ -218,10 +287,9 @@ public class GameController : MonoBehaviour
         {
             foreach (WaveInfo waveInfo in waves)
             {
-                if (waveInfo.enemy && waveInfo.enemy.Health <= 0)
+                if (waveInfo.enemy && waveInfo.enemy.isActiveAndEnabled && waveInfo.enemy.Health <= 0)
                 {
-                    Destroy(waveInfo.enemy.gameObject);
-                    waveInfo.enemy = null;
+                    waveInfo.enemy.gameObject.SetActive(false);
                     waveInfo.wave.SetBarriersActive(false);
                 }
             }

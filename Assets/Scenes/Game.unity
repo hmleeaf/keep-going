@@ -2246,7 +2246,8 @@ MonoBehaviour:
   ambientTextSpawnChance: 1
   tutorialLength: 180
   tutorialObject: {fileID: 1768530896}
-  transitionableDistance: 1200
+  transitionableDistance: 400
+  transitionDuration: 2
 --- !u!4 &2137233359
 Transform:
   m_ObjectHideFlags: 0

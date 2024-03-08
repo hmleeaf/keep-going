@@ -31,6 +31,11 @@ public class Entity : MonoBehaviour
         lastDamaged = Time.time;
     }
 
+    public void HealToFull()
+    {
+        health = maxHp;
+    }
+
     IEnumerator Regen()
     {
         if (Time.time > lastDamaged + autoRegenWait)

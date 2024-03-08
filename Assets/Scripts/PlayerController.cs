@@ -28,13 +28,16 @@ public class PlayerController : MonoBehaviour
     Vector3 dashDir = Vector3.zero;
     Plane cursorPlane;
     bool isInverseMovementControls = false;
-    Entity playerEntity;
+    Entity entity;
+    bool inputEnabled;
+
+    public bool IsDead => entity.Health <= 0;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         trailRenderer = GetComponent<TrailRenderer>();
-        playerEntity = GetComponent<Entity>();
+        entity = GetComponent<Entity>();
     }
 
     void OnEnable()
@@ -42,6 +45,7 @@ public class PlayerController : MonoBehaviour
         input = new PlayerInput();
         input.Enable();
         input.Player.Enable();
+        inputEnabled = true;
 
         cursorPlane = new Plane(Vector3.up, -cursorPlaneY);
     }
@@ -50,6 +54,7 @@ public class PlayerController : MonoBehaviour
     {
         input.Disable();
         input.Player.Disable();
+        inputEnabled = false;
     }
 
     void Update()
@@ -61,15 +66,17 @@ public class PlayerController : MonoBehaviour
         ClampToPlayableArea();
         Attack();
         Trail();
-        CheckHealth();
     }
 
     private void RaycastMouse()
     {
-        Ray mouseRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        if (cursorPlane.Raycast(mouseRay, out float enter))
+        if (inputEnabled)
         {
-            mouseWorldPoint = mouseRay.GetPoint(enter);
+            Ray mouseRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+            if (cursorPlane.Raycast(mouseRay, out float enter))
+            {
+                mouseWorldPoint = mouseRay.GetPoint(enter);
+            }
         }
     }
     
@@ -141,14 +148,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void CheckHealth()
-    {
-        if (playerEntity.Health <= 0)
-        {
-            Debug.Log("player dead");
-        }
-    }
-
     //private void OnDrawGizmos()
     //{
     //    if (Application.isPlaying)
@@ -162,5 +161,20 @@ public class PlayerController : MonoBehaviour
         isInverseMovementControls = true;
     }
 
-    
+    public void DisableInput()
+    {
+        input.Disable();
+        inputEnabled = false;
+    }
+
+    public void EnableInput()
+    {
+        input.Enable();
+        inputEnabled = true;
+    }
+
+    public void HealToFull()
+    {
+        entity.HealToFull();
+    }
 }
