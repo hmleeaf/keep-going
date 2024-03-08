@@ -91,4 +91,9 @@ public class EnemyAI : MonoBehaviour
         Gizmos.color = Color.black;
         Gizmos.DrawSphere(playerController.transform.position, 1f);
     }
+
+    public void ResetAggro()
+    {
+        aggroed = false;
+    }
 }

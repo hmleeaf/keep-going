@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEditor.AI;
 using UnityEngine;
+using UnityEngine.AI;
 using static GameController;
 
 public class GameController : MonoBehaviour
@@ -36,7 +37,6 @@ public class GameController : MonoBehaviour
     [Header("Enemy")]
     [SerializeField] GameObject enemyPrefab;
     [SerializeField, Range(0f, 1f)] float enemyChance = 0.25f;
-    [SerializeField] float enemySpawnDistanceFromWall = 10f;
 
     [Header("Ambient Text")]
     [SerializeField] GameObject ambientTextPrefab;
@@ -192,6 +192,7 @@ public class GameController : MonoBehaviour
         playerController.TransitionGameState();
         gameState = GameState.Lorule;
         tutorialObject.SetActive(false);
+        playerController.HealToFull();
 
         DeactivateCrates();
         BuildNavMesh();
@@ -231,14 +232,16 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            foreach (WaveInfo wave in waves)
+            for (int i = 0; i < waves.Count - 2; i++) 
             {
+                WaveInfo wave = waves[i];
                 wave.wave.SetBarriersActive(true);
                 if (wave.enemy)
                 {
                     wave.enemy.gameObject.SetActive(true);
-                    // wave.enemy.transform.position = 
+                    wave.enemy.GetComponent<NavMeshAgent>().Warp(enemyPrefab.transform.position + wave.wave.EnemySpawnPoint);
                     wave.enemy.HealToFull();
+                    wave.enemy.gameObject.GetComponent<EnemyAI>().ResetAggro();
                 }
             }
 
@@ -275,8 +278,7 @@ public class GameController : MonoBehaviour
     void SetupHostileWave(int waveIdx)
     {
         WaveInfo waveInfo = waves[waveIdx];
-        GameObject enemyObj = Instantiate(enemyPrefab);
-        enemyObj.transform.position = enemyPrefab.transform.position + Vector3.forward * (waveInfo.wave.BoundsMin.z + enemySpawnDistanceFromWall);
+        GameObject enemyObj = Instantiate(enemyPrefab, enemyPrefab.transform.position + waveInfo.wave.EnemySpawnPoint, Quaternion.identity);
         waveInfo.wave.SetBarriersActive(true);
         waveInfo.enemy = enemyObj.GetComponent<Entity>();
     }

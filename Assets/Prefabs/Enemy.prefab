@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 5764393794047528130}
   - component: {fileID: 6564089557511181102}
   - component: {fileID: -1535299125552083561}
-  - component: {fileID: 2737520761080443936}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Enemy
@@ -148,7 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxMoveTime: 2
   minXMove: -9.5
-  maxXMove: 9
+  maxXMove: 9.5
   aggroRadius: 20
   bulletPrefab: {fileID: 5197768659681181758, guid: ed0471a11682d9c4bb2cf184b7e7fa45, type: 3}
   attackInterval: 2
@@ -166,33 +165,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 100
---- !u!54 &2737520761080443936
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1318540124296002471}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 10
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  autoRegen: 0
+  autoRegenPerTick: 1
+  autoRegenTick: 0.2
+  autoRegenWait: 1
+  health: 0
 --- !u!1 &1711041574183686047
 GameObject:
   m_ObjectHideFlags: 0

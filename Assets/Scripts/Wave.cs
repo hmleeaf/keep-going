@@ -8,6 +8,7 @@ public class Wave : MonoBehaviour
     [SerializeField] List<GameObject> crates = new List<GameObject>();
     [SerializeField] Vector3 localBoundsMin;
     [SerializeField] Vector3 localBoundsMax;
+    [SerializeField] Transform enemySpawnPoint;
 
     private void OnEnable()
     {
@@ -17,6 +18,7 @@ public class Wave : MonoBehaviour
     public Vector3 BoundsMin { get { return transform.position + localBoundsMin; } }
     public Vector3 BoundsMax { get { return transform.position + localBoundsMax; } }
     public Vector3 Size { get { return localBoundsMax - localBoundsMin; } }
+    public Vector3 EnemySpawnPoint { get { return enemySpawnPoint.position; } }
 
     public void SetBarriersActive(bool active)
     {

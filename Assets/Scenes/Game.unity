@@ -2236,7 +2236,6 @@ MonoBehaviour:
   navMeshSurface: {fileID: 690069903}
   enemyPrefab: {fileID: 1318540124296002471, guid: 76ba989432885714f9eed40209f7c232, type: 3}
   enemyChance: 1
-  enemySpawnDistanceFromWall: 10
   ambientTextPrefab: {fileID: 412528564088269546, guid: 51f816d3360418e4297250dd6746d576, type: 3}
   ambientTextXMin: -10
   ambientTextXMax: 10
@@ -2246,7 +2245,7 @@ MonoBehaviour:
   ambientTextSpawnChance: 1
   tutorialLength: 180
   tutorialObject: {fileID: 1768530896}
-  transitionableDistance: 400
+  transitionableDistance: 200
   transitionDuration: 2
 --- !u!4 &2137233359
 Transform:
