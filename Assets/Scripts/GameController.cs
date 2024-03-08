@@ -193,6 +193,13 @@ public class GameController : MonoBehaviour
         gameState = GameState.Lorule;
         tutorialObject.SetActive(false);
         playerController.HealToFull();
+        foreach (WaveInfo wave in waves)
+        {
+            foreach (Coin coin in wave.wave.GetComponentsInChildren<Coin>())
+            {
+                Destroy(coin.gameObject);
+            }
+        }
 
         DeactivateCrates();
         BuildNavMesh();
