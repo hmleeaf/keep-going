@@ -27,7 +27,7 @@ public class Entity : MonoBehaviour
 
     public void Damage(int damage)
     {
-        health -= damage;
+        health = Mathf.Clamp(health - damage, 0, maxHp);
         lastDamaged = Time.time;
     }
 

@@ -1,10 +1,12 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.AI.Navigation;
 using UnityEditor.AI;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 using static GameController;
 
 public class GameController : MonoBehaviour
@@ -53,7 +55,15 @@ public class GameController : MonoBehaviour
 
     [Header("Game flow")]
     [SerializeField] float transitionableDistance = 1200f;
-    [SerializeField] float transitionDuration = 5f;
+    [SerializeField] float transitionText1Duration = 3f;
+    [SerializeField] float transitionText2Duration = 3f;
+    [SerializeField] float transitionTurnDuration = 2f;
+    [SerializeField, Multiline] string transitionText1 = "You weren't like this before. \r\nYou weren't an aberration.";
+    [SerializeField, Multiline] string transitionText2 = "Don't go back. \r\n It's too late.";
+
+    [Header("Screen Text")]
+    [SerializeField] FadeInOutText screenText;
+    [SerializeField] FadeInOutImage blackoutOverlay;
 
     float progress = 0;
     Vector3 initialHyruleCameraPos;
@@ -77,7 +87,8 @@ public class GameController : MonoBehaviour
     public enum GameState
     {
         Hyrule, 
-        Lorule
+        Lorule, 
+        HyruleToLorule, 
     }
     GameState gameState = GameState.Hyrule;
 
@@ -185,14 +196,10 @@ public class GameController : MonoBehaviour
     void TransitionToLorule()
     {
         loruleSpawn = playerController.transform.position;
-        chaser.SetActive(false);
-        LoruleCamera.transform.position = initialLoruleCameraPos + Vector3.forward * progress;
-        LoruleCamera.SetActive(true);
-        HyruleCamera.SetActive(false);
         playerController.TransitionGameState();
-        gameState = GameState.Lorule;
+        gameState = GameState.HyruleToLorule;
         tutorialObject.SetActive(false);
-        playerController.HealToFull();
+        playerController.DisableInput();
         foreach (WaveInfo wave in waves)
         {
             foreach (Coin coin in wave.wave.GetComponentsInChildren<Coin>())
@@ -209,14 +216,35 @@ public class GameController : MonoBehaviour
         DeactivateCrates();
         BuildNavMesh();
         SpawnEnemies();
+        
+        StartCoroutine(TransitionTexts());
+    }
 
-        playerController.DisableInput();
+    IEnumerator TransitionTexts()
+    {
+        blackoutOverlay.FadeIn();
+        screenText.FadeIn(transitionText1);
+        yield return new WaitForSeconds(transitionText1Duration);
+        screenText.FadeOut(1f);
+        yield return new WaitForSeconds(2f);
+        screenText.FadeIn(transitionText2);
+        yield return new WaitForSeconds(transitionText2Duration);
+        blackoutOverlay.FadeOut();
+        screenText.FadeOut();
         StartCoroutine(EndTransition());
     }
 
     IEnumerator EndTransition()
     {
-        yield return new WaitForSeconds(transitionDuration);
+        chaser.SetActive(false);
+        playerController.HealToFull();
+        LoruleCamera.transform.position = initialLoruleCameraPos + Vector3.forward * progress;
+        progress = loruleSpawn.z;
+        LoruleCamera.SetActive(true);
+        HyruleCamera.SetActive(false);
+
+        yield return new WaitForSeconds(transitionTurnDuration);
+        gameState = GameState.Lorule;
         playerController.EnableInput();
     }
 
@@ -242,7 +270,7 @@ public class GameController : MonoBehaviour
             playerController.HealToFull();
             chaser.transform.position = initialChaserPosition;
         }
-        else
+        else if (gameState == GameState.Lorule)
         {
             for (int i = 0; i < waves.Count - 2; i++) 
             {
