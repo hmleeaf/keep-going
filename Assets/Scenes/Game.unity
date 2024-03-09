@@ -2658,6 +2658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 1029097432}
+  playerEntity: {fileID: 1029097435}
   HyruleCamera: {fileID: 1094173941}
   LoruleCamera: {fileID: 974104314}
   smoothingFactor: 0.5
@@ -2678,6 +2679,9 @@ MonoBehaviour:
   ambientTextZSpawnZoneFromTop: 0.5
   ambientTextSpawnInterval: 2.5
   ambientTextSpawnChance: 1
+  conditionalTextPrefab: {fileID: 412528564088269546, guid: cfc2faacd5021cc4e9e742303a06dd94, type: 3}
+  conditionalTextDuration: 2.5
+  conditionalTextCooldown: 2.5
   tutorialLength: 180
   tutorialObject: {fileID: 1768530896}
   transitionableDistance: 200

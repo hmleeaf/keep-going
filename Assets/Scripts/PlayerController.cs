@@ -172,9 +172,4 @@ public class PlayerController : MonoBehaviour
         input.Enable();
         inputEnabled = true;
     }
-
-    public void HealToFull()
-    {
-        entity.HealToFull();
-    }
 }

@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour
 {
     [Header("Player")]
     [SerializeField] PlayerController playerController;
+    [SerializeField] Entity playerEntity;
 
     [Header("Camera")]
     [SerializeField] GameObject HyruleCamera;
@@ -40,7 +41,7 @@ public class GameController : MonoBehaviour
     [SerializeField] GameObject enemyPrefab;
     [SerializeField, Range(0f, 1f)] float enemyChance = 0.25f;
 
-    [Header("Ambient Text")]
+    [Header("World Space Texts")]
     [SerializeField] GameObject ambientTextPrefab;
     [SerializeField] float ambientTextXMin = -10f;
     [SerializeField] float ambientTextXMax = 10f;
@@ -48,6 +49,9 @@ public class GameController : MonoBehaviour
     [SerializeField, Range(0f, 1f)] float ambientTextZSpawnZoneFromTop = 0.5f;
     [SerializeField] float ambientTextSpawnInterval = 1f;
     [SerializeField] float ambientTextSpawnChance = 1f;
+    [SerializeField] GameObject conditionalTextPrefab;
+    [SerializeField] float conditionalTextDuration = 4f;
+    [SerializeField] float conditionalTextCooldown = 5f;
 
     [Header("Tutorial")]
     [SerializeField] float tutorialLength = 60f;
@@ -74,6 +78,27 @@ public class GameController : MonoBehaviour
     Vector2 ambientZRange;
     float lastAmbientTextSpawnTime = float.MinValue;
     Vector3 loruleSpawn;
+    Dictionary<ConditionalPrompt, AmbientText> conditionalTextsDict = new Dictionary<ConditionalPrompt, AmbientText>();
+
+    enum ConditionalPrompt
+    {
+        WrongDirection,
+        InFog,
+        InDeepFog,
+        OmitTutorialCrateCoin,
+        Progress1,
+        Progress2,
+        Progress3,
+        Progress4,
+        ProgressCanTransition,
+    }
+
+    Dictionary<ConditionalPrompt, string> conditionalPromptTexts = new Dictionary<ConditionalPrompt, string>()
+    {
+        { ConditionalPrompt.WrongDirection, "Hey that's the wrong way" }, 
+        { ConditionalPrompt.InFog, "Don't go there" }, 
+        { ConditionalPrompt.InDeepFog, "Get out now" }, 
+    };
 
     public float Progress { get { return progress; } }
     public float TransitionableDistance { get { return transitionableDistance; } }
@@ -120,6 +145,7 @@ public class GameController : MonoBehaviour
         CheckEnemies();
         UpdateAmbientText();
         CheckPlayerHealth();
+        CheckConditionalPrompts();
     }
 
     void CalcProgress()
@@ -237,7 +263,7 @@ public class GameController : MonoBehaviour
     IEnumerator EndTransition()
     {
         chaser.SetActive(false);
-        playerController.HealToFull();
+        playerEntity.HealToFull();
         LoruleCamera.transform.position = initialLoruleCameraPos + Vector3.forward * progress;
         progress = loruleSpawn.z;
         LoruleCamera.SetActive(true);
@@ -267,7 +293,7 @@ public class GameController : MonoBehaviour
 
             progress = 0;
             playerController.transform.position = new Vector3(0, 1, tutorialLength - 30f);
-            playerController.HealToFull();
+            playerEntity.HealToFull();
             chaser.transform.position = initialChaserPosition;
         }
         else if (gameState == GameState.Lorule)
@@ -287,7 +313,7 @@ public class GameController : MonoBehaviour
 
             progress = loruleSpawn.z;
             playerController.transform.position = loruleSpawn;
-            playerController.HealToFull();
+            playerEntity.HealToFull();
         }
     }
 
@@ -348,16 +374,23 @@ public class GameController : MonoBehaviour
             lastAmbientTextSpawnTime = Time.time;
             if (Random.value < ambientTextSpawnChance)
             {
-                GameObject ambientTextObj = Instantiate(ambientTextPrefab);
-                ambientTextObj.transform.position = new Vector3(
-                    ambientTexts.Count % 2 == 0 ? ambientTextXMin : ambientTextXMax, 
+                Vector3 position = new Vector3(
+                    ambientTexts.Count % 2 == 0 ? ambientTextXMin : ambientTextXMax,
                     ambientTextY,
                     Camera.main.transform.position.z + Random.Range(Mathf.Lerp(ambientZRange.y, ambientZRange.x, ambientTextZSpawnZoneFromTop), ambientZRange.y) * (gameState == GameState.Lorule ? -1 : 1)
                 );
-                AmbientText ambientText = ambientTextObj.GetComponent<AmbientText>();
-                ambientTexts.Add(ambientText);
+                ambientTexts.Add(SpawnAmbientText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis scelerisque posuere leo et suscipit. Morbi non scelerisque justo. Proin at gravida est. Aliquam lacinia nunc vel nunc pretium, at tincidunt metus ultrices.", 
+                    position));
             }
         }
+    }
+
+    AmbientText SpawnAmbientText(string text, Vector3 position)
+    {
+        GameObject ambientTextObj = Instantiate(ambientTextPrefab, position, Quaternion.identity);
+        AmbientText ambientText = ambientTextObj.GetComponent<AmbientText>();
+        ambientText.SetText(text);
+        return ambientText;
     }
 
     void CalculateAmbientZRange()
@@ -371,6 +404,58 @@ public class GameController : MonoBehaviour
             bottomMiddleRay.GetPoint(bottomEnter).z,
             topMiddleRay.GetPoint(topEnter).z
         ) - Vector2.one * Camera.main.transform.position.z;
+    }
+
+    void CheckConditionalPrompts()
+    {
+        if (CanSpawnConditionalPrompt(ConditionalPrompt.WrongDirection) && playerController.transform.position.z < progress - 1f)
+        {
+            SpawnConditionalPrompt(ConditionalPrompt.WrongDirection);
+        }
+
+        if (CanSpawnConditionalPrompt(ConditionalPrompt.InFog) && (float)playerEntity.Health / playerEntity.MaxHp < 1f && gameState == GameState.Hyrule)
+        {
+            SpawnConditionalPrompt(ConditionalPrompt.InFog);
+        }
+
+        if (CanSpawnConditionalPrompt(ConditionalPrompt.InDeepFog) && (float)playerEntity.Health / playerEntity.MaxHp < 0.4f && gameState == GameState.Hyrule)
+        {
+            SpawnConditionalPrompt(ConditionalPrompt.InDeepFog);
+        }
+    }
+
+    AmbientText SpawnCenterPrompt(string text)
+    {
+        Vector3 position = new Vector3(
+            0,
+            ambientTextY,
+            Camera.main.transform.position.z + Mathf.Lerp(ambientZRange.x, ambientZRange.y, 0.25f) * (gameState == GameState.Lorule ? -1 : 1)
+        );
+        GameObject ambientTextObj = Instantiate(conditionalTextPrefab, position, Quaternion.identity);
+        AmbientText ambientText = ambientTextObj.GetComponent<AmbientText>();
+        ambientText.SetText(text);
+        return ambientText;
+    }
+
+    bool CanSpawnConditionalPrompt(ConditionalPrompt conditionalPrompt)
+    {
+        return !conditionalTextsDict.ContainsKey(conditionalPrompt);
+    }
+
+    void SpawnConditionalPrompt(ConditionalPrompt conditionalPrompt)
+    {
+        conditionalTextsDict.Add(
+            conditionalPrompt, 
+            SpawnCenterPrompt(conditionalPromptTexts[conditionalPrompt])
+        );
+        StartCoroutine(ConditionalPromptCooldown(ConditionalPrompt.WrongDirection));
+    }
+
+    IEnumerator ConditionalPromptCooldown(ConditionalPrompt conditionalPrompt)
+    {
+        yield return new WaitForSeconds(conditionalTextDuration + conditionalTextCooldown);
+        Destroy(conditionalTextsDict[conditionalPrompt].gameObject);
+        conditionalTextsDict.Remove(conditionalPrompt);
     }
 
     //private void OnDrawGizmos()
