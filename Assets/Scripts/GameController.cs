@@ -90,6 +90,7 @@ public class GameController : MonoBehaviour
 
     public float Progress { get { return progress; } }
     public float TransitionableDistance { get { return transitionableDistance; } }
+    public GameState State { get { return gameState; } }
 
     class WaveInfo
     {
@@ -134,6 +135,35 @@ public class GameController : MonoBehaviour
         UpdateAmbientText();
         CheckPlayerHealth();
         CheckConditionalPrompts();
+        ClampPlayerZ();
+    }
+
+    void ClampPlayerZ()
+    {
+        if (gameState == GameState.Hyrule)
+        {
+            float zBound = Camera.main.transform.position.z + ambientZRange.x;
+            if (playerController.transform.position.z < zBound)
+            {
+                playerController.transform.position = new Vector3(
+                    playerController.transform.position.x,
+                    playerController.transform.position.y,
+                    zBound
+                );
+            }
+        }
+        else if (gameState == GameState.Lorule)
+        {
+            float zBound = Camera.main.transform.position.z - ambientZRange.x;
+            if (playerController.transform.position.z > zBound)
+            {
+                playerController.transform.position = new Vector3(
+                    playerController.transform.position.x,
+                    playerController.transform.position.y,
+                    zBound
+                );
+            }
+        }
     }
 
     void CalcProgress()
