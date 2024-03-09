@@ -13,6 +13,7 @@ public class CoinManager : MonoBehaviour
     }
 
     int coins;
+    public int Coins { get { return coins; } }
 
     public void AddCoin(int coinValue)
     {

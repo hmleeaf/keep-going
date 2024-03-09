@@ -51,14 +51,19 @@ public class GameController : MonoBehaviour
     [SerializeField] float ambientTextSpawnChance = 1f;
     [SerializeField] GameObject conditionalTextPrefab;
     [SerializeField] float conditionalTextDuration = 4f;
-    [SerializeField] float conditionalTextCooldown = 5f;
+    [SerializeField] float conditionalTextCooldown = 1f;
+    [SerializeField] float coinTextDistance = 110f;
+    [SerializeField] float encouragingTextEndPoint = 500f;
+    [SerializeField] float indifferentTextEndPoint = 800f;
+    [SerializeField] float condescendingTextEndPoint = 1100f;
+    [SerializeField] float manipulativeTextEndPoint = 1400f;
 
     [Header("Tutorial")]
     [SerializeField] float tutorialLength = 60f;
     [SerializeField] GameObject tutorialObject;
 
     [Header("Game flow")]
-    [SerializeField] float transitionableDistance = 1200f;
+    [SerializeField] float transitionableDistance = 1400f;
     [SerializeField] float transitionText1Duration = 3f;
     [SerializeField] float transitionText2Duration = 3f;
     [SerializeField] float transitionTurnDuration = 2f;
@@ -69,6 +74,9 @@ public class GameController : MonoBehaviour
     [SerializeField] FadeInOutText screenText;
     [SerializeField] FadeInOutImage blackoutOverlay;
 
+    [Header("Coin")]
+    [SerializeField] CoinManager coinManager;
+
     float progress = 0;
     Vector3 initialHyruleCameraPos;
     Vector3 initialLoruleCameraPos;
@@ -78,27 +86,7 @@ public class GameController : MonoBehaviour
     Vector2 ambientZRange;
     float lastAmbientTextSpawnTime = float.MinValue;
     Vector3 loruleSpawn;
-    Dictionary<ConditionalPrompt, AmbientText> conditionalTextsDict = new Dictionary<ConditionalPrompt, AmbientText>();
-
-    enum ConditionalPrompt
-    {
-        WrongDirection,
-        InFog,
-        InDeepFog,
-        OmitTutorialCrateCoin,
-        Progress1,
-        Progress2,
-        Progress3,
-        Progress4,
-        ProgressCanTransition,
-    }
-
-    Dictionary<ConditionalPrompt, string> conditionalPromptTexts = new Dictionary<ConditionalPrompt, string>()
-    {
-        { ConditionalPrompt.WrongDirection, "Hey that's the wrong way" }, 
-        { ConditionalPrompt.InFog, "Don't go there" }, 
-        { ConditionalPrompt.InDeepFog, "Get out now" }, 
-    };
+    Dictionary<Prompts.Condition, AmbientText> activeConditionTexts = new Dictionary<Prompts.Condition, AmbientText>();
 
     public float Progress { get { return progress; } }
     public float TransitionableDistance { get { return transitionableDistance; } }
@@ -379,8 +367,29 @@ public class GameController : MonoBehaviour
                     ambientTextY,
                     Camera.main.transform.position.z + Random.Range(Mathf.Lerp(ambientZRange.y, ambientZRange.x, ambientTextZSpawnZoneFromTop), ambientZRange.y) * (gameState == GameState.Lorule ? -1 : 1)
                 );
-                ambientTexts.Add(SpawnAmbientText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis scelerisque posuere leo et suscipit. Morbi non scelerisque justo. Proin at gravida est. Aliquam lacinia nunc vel nunc pretium, at tincidunt metus ultrices.", 
-                    position));
+
+                Prompts.Tone tone = Prompts.Tone.Doubtful;
+                if (gameState == GameState.Hyrule)
+                {
+                    if (progress < encouragingTextEndPoint)
+                    {
+                        tone = Prompts.Tone.Encouraging;
+                    }
+                    else if (progress < indifferentTextEndPoint)
+                    {
+                        tone = Prompts.Tone.Indifferent;
+                    }
+                    else if (progress < condescendingTextEndPoint)
+                    {
+                        tone = Prompts.Tone.Condescending;
+                    }
+                    else if (progress < manipulativeTextEndPoint)
+                    {
+                        tone = Prompts.Tone.Manipulative;
+                    }
+                }
+
+                ambientTexts.Add(SpawnAmbientText(Prompts.GetPrompt(tone), position));
             }
         }
     }
@@ -408,28 +417,53 @@ public class GameController : MonoBehaviour
 
     void CheckConditionalPrompts()
     {
-        if (CanSpawnConditionalPrompt(ConditionalPrompt.WrongDirection) && playerController.transform.position.z < progress - 1f)
+        if (!IsPromptSpawned(Prompts.Condition.WrongDirection) 
+            && !IsPromptSpawned(Prompts.Condition.InFog)
+            && !IsPromptSpawned(Prompts.Condition.InDeepFog)
+            && playerController.transform.position.z < progress - 1f)
         {
-            SpawnConditionalPrompt(ConditionalPrompt.WrongDirection);
+            SpawnConditionalPrompt(Prompts.Condition.WrongDirection);
         }
 
-        if (CanSpawnConditionalPrompt(ConditionalPrompt.InFog) && (float)playerEntity.Health / playerEntity.MaxHp < 1f && gameState == GameState.Hyrule)
+        if (!IsPromptSpawned(Prompts.Condition.InFog) 
+            && !IsPromptSpawned(Prompts.Condition.InDeepFog)
+            && (float)playerEntity.Health / playerEntity.MaxHp < 1f 
+            && gameState == GameState.Hyrule)
         {
-            SpawnConditionalPrompt(ConditionalPrompt.InFog);
+            DespawnConditionalPrompt(Prompts.Condition.WrongDirection);
+            SpawnConditionalPrompt(Prompts.Condition.InFog);
         }
 
-        if (CanSpawnConditionalPrompt(ConditionalPrompt.InDeepFog) && (float)playerEntity.Health / playerEntity.MaxHp < 0.4f && gameState == GameState.Hyrule)
+        if (!IsPromptSpawned(Prompts.Condition.InDeepFog) 
+            && (float)playerEntity.Health / playerEntity.MaxHp < 0.4f 
+            && gameState == GameState.Hyrule)
         {
-            SpawnConditionalPrompt(ConditionalPrompt.InDeepFog);
+            DespawnConditionalPrompt(Prompts.Condition.WrongDirection);
+            DespawnConditionalPrompt(Prompts.Condition.InFog);
+            SpawnConditionalPrompt(Prompts.Condition.InDeepFog);
+        }
+
+        if (!IsPromptSpawned(Prompts.Condition.OmitTutorialCrateCoin) 
+            && coinManager.Coins < 1
+            && playerController.transform.position.z > coinTextDistance
+            && playerController.transform.position.z < coinTextDistance + 10f) 
+        {
+            SpawnConditionalPrompt(Prompts.Condition.OmitTutorialCrateCoin, 0.75f);
+        }
+
+        if (!IsPromptSpawned(Prompts.Condition.ProgressCanTransition)
+            && playerController.transform.position.z > transitionableDistance)
+        {
+            SpawnConditionalPrompt(Prompts.Condition.ProgressCanTransition, 0.75f);
         }
     }
 
-    AmbientText SpawnCenterPrompt(string text)
+    AmbientText SpawnCenterPrompt(string text, float offsetFromBottomPercentage)
     {
         Vector3 position = new Vector3(
             0,
             ambientTextY,
-            Camera.main.transform.position.z + Mathf.Lerp(ambientZRange.x, ambientZRange.y, 0.25f) * (gameState == GameState.Lorule ? -1 : 1)
+            Camera.main.transform.position.z + Mathf.Lerp(ambientZRange.x, ambientZRange.y, offsetFromBottomPercentage) * (gameState == GameState.Lorule ? -1 : 1)
         );
         GameObject ambientTextObj = Instantiate(conditionalTextPrefab, position, Quaternion.identity);
         AmbientText ambientText = ambientTextObj.GetComponent<AmbientText>();
@@ -437,25 +471,33 @@ public class GameController : MonoBehaviour
         return ambientText;
     }
 
-    bool CanSpawnConditionalPrompt(ConditionalPrompt conditionalPrompt)
+    bool IsPromptSpawned(Prompts.Condition conditionalPrompt)
     {
-        return !conditionalTextsDict.ContainsKey(conditionalPrompt);
+        return activeConditionTexts.ContainsKey(conditionalPrompt);
     }
 
-    void SpawnConditionalPrompt(ConditionalPrompt conditionalPrompt)
+    void SpawnConditionalPrompt(Prompts.Condition conditionalPrompt, float offsetFromBottomPercentage = 0.25f)
     {
-        conditionalTextsDict.Add(
+        activeConditionTexts.Add(
             conditionalPrompt, 
-            SpawnCenterPrompt(conditionalPromptTexts[conditionalPrompt])
+            SpawnCenterPrompt(Prompts.GetPrompt(conditionalPrompt), offsetFromBottomPercentage)
         );
-        StartCoroutine(ConditionalPromptCooldown(ConditionalPrompt.WrongDirection));
+        StartCoroutine(ConditionalPromptCooldown(conditionalPrompt));
     }
 
-    IEnumerator ConditionalPromptCooldown(ConditionalPrompt conditionalPrompt)
+    void DespawnConditionalPrompt(Prompts.Condition conditionalPrompt)
+    {
+        if (activeConditionTexts.ContainsKey(conditionalPrompt))
+        {
+            Destroy(activeConditionTexts[conditionalPrompt].gameObject);
+            activeConditionTexts.Remove(conditionalPrompt);
+        }
+    }
+
+    IEnumerator ConditionalPromptCooldown(Prompts.Condition conditionalPrompt)
     {
         yield return new WaitForSeconds(conditionalTextDuration + conditionalTextCooldown);
-        Destroy(conditionalTextsDict[conditionalPrompt].gameObject);
-        conditionalTextsDict.Remove(conditionalPrompt);
+        DespawnConditionalPrompt(conditionalPrompt);
     }
 
     //private void OnDrawGizmos()
