@@ -47,6 +47,31 @@ public class FadeInOutImage : MonoBehaviour
         return success;
     }
 
+    public bool FadeIn(Color color)
+    {
+        bool success = FadeIn();
+        if (success)
+        {
+            this.color.r = color.r;
+            this.color.g = color.g;
+            this.color.b = color.b;
+        }
+        return success;
+    }
+
+    public bool FadeIn(Color color, float fadeInDuration)
+    {
+        bool success = FadeIn();
+        if (success)
+        {
+            this.color.r = color.r;
+            this.color.g = color.g;
+            this.color.b = color.b;
+            this.fadeInDuration = fadeInDuration;
+        }
+        return success;
+    }
+
     public bool FadeOut()
     {
         if (state != FadeState.Visible) return false;

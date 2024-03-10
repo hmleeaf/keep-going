@@ -69,6 +69,7 @@ public class GameController : MonoBehaviour
     [SerializeField] float transitionTurnDuration = 2f;
     [SerializeField, Multiline] string transitionText1 = "You weren't like this before. \r\nYou weren't an aberration.";
     [SerializeField, Multiline] string transitionText2 = "Don't go back. \r\n It's too late.";
+    [SerializeField] float endDistance = -200f;
 
     [Header("Screen Text")]
     [SerializeField] FadeInOutText screenText;
@@ -91,6 +92,7 @@ public class GameController : MonoBehaviour
     public float Progress { get { return progress; } }
     public float TransitionableDistance { get { return transitionableDistance; } }
     public GameState State { get { return gameState; } }
+    public float EndDistance { get { return endDistance; } }
 
     class WaveInfo
     {
@@ -136,6 +138,23 @@ public class GameController : MonoBehaviour
         CheckPlayerHealth();
         CheckConditionalPrompts();
         ClampPlayerZ();
+        CheckEnd();
+    }
+
+    void CheckEnd()
+    {
+        if (progress < endDistance)
+        {
+            StartCoroutine(EndSequence());
+        }
+    }
+
+    IEnumerator EndSequence()
+    {
+        blackoutOverlay.FadeIn(Color.white, 5f);
+        yield return new WaitForSeconds(5f);
+        screenText.FadeIn("Thanks for playing.", Color.black, 3f);
+        yield return new WaitForSeconds(3f);
     }
 
     void ClampPlayerZ()
@@ -387,6 +406,9 @@ public class GameController : MonoBehaviour
         // don't spawn ambient texts during tutorial
         if (progress < tutorialLength && gameState == GameState.Hyrule) return;
 
+        // don't spawn during ending sequence
+        if (progress < 0 && gameState == GameState.Lorule) return;
+
         if (Time.time > lastAmbientTextSpawnTime + ambientTextSpawnInterval)
         {
             lastAmbientTextSpawnTime = Time.time;
@@ -476,13 +498,15 @@ public class GameController : MonoBehaviour
         if (!IsPromptSpawned(Prompts.Condition.OmitTutorialCrateCoin) 
             && coinManager.Coins < 1
             && playerController.transform.position.z > coinTextDistance
-            && playerController.transform.position.z < coinTextDistance + 10f) 
+            && playerController.transform.position.z < coinTextDistance + 10f
+            && gameState == GameState.Hyrule) 
         {
             SpawnConditionalPrompt(Prompts.Condition.OmitTutorialCrateCoin, 0.75f);
         }
 
         if (!IsPromptSpawned(Prompts.Condition.ProgressCanTransition)
-            && playerController.transform.position.z > transitionableDistance)
+            && playerController.transform.position.z > transitionableDistance
+            && gameState == GameState.Hyrule)
         {
             SpawnConditionalPrompt(Prompts.Condition.ProgressCanTransition, 0.75f);
         }

@@ -33,8 +33,18 @@ public class SaturationPostProcess : MonoBehaviour
 
     void UpdateSaturation()
     {
-        float progress = gameController.Progress;
-        float t = (progress - minDistanceToStartDesaturate) / (gameController.TransitionableDistance - minDistanceToStartDesaturate);
-        colorAdjustments.saturation.value = Mathf.Lerp(0, -100, t);
+        if (gameController.State == GameController.GameState.Lorule)
+        {
+            float progress = gameController.Progress;
+            float t = Mathf.Min(0f, progress);
+            t = t / gameController.EndDistance;
+            colorAdjustments.saturation.value = Mathf.Lerp(-100, 0, t);
+        } 
+        else
+        {
+            float progress = gameController.Progress;
+            float t = (progress - minDistanceToStartDesaturate) / (gameController.TransitionableDistance - minDistanceToStartDesaturate);
+            colorAdjustments.saturation.value = Mathf.Lerp(0, -100, t);
+        }
     }
 }

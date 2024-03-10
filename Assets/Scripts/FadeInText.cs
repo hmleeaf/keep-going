@@ -8,6 +8,7 @@ public class FadeInOutText : MonoBehaviour
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] float fadeInDuration = 1f;
     [SerializeField] float fadeOutDuration = 1f;
+    [SerializeField] bool stays = false;
 
     enum FadeState
     {
@@ -39,6 +40,27 @@ public class FadeInOutText : MonoBehaviour
         if (success)
         {
             this.fadeInDuration = fadeInDuration;
+        }
+        return success;
+    }
+
+    public bool FadeIn(string text, Color color, float fadeInDuration)
+    {
+        bool success = FadeIn(text);
+        if (success)
+        {
+            this.text.color = color;
+            this.fadeInDuration = fadeInDuration;
+        }
+        return success;
+    }
+
+    public bool FadeIn(string text, Color color)
+    {
+        bool success = FadeIn(text);
+        if (success)
+        {
+            this.text.color = color;
         }
         return success;
     }
