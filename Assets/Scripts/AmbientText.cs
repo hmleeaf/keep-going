@@ -28,6 +28,8 @@ public class AmbientText : MonoBehaviour
 
     private void Update()
     {
+        if (cinemachineBrain.ActiveVirtualCamera == null) return;
+
         transform.forward = cinemachineBrain.ActiveVirtualCamera.VirtualCameraGameObject.transform.forward;
         lifetime += Time.deltaTime;
         if (lifetime > fadeInTime && stays)

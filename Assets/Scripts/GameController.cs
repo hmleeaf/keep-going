@@ -6,6 +6,7 @@ using Unity.AI.Navigation;
 using UnityEditor.AI;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static GameController;
 
@@ -154,7 +155,8 @@ public class GameController : MonoBehaviour
         blackoutOverlay.FadeIn(Color.white, 5f);
         yield return new WaitForSeconds(5f);
         screenText.FadeIn("Thanks for playing.", Color.black, 3f);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(3f + 5f);
+        SceneManager.LoadScene("Title");
     }
 
     void ClampPlayerZ()
