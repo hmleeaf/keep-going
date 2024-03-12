@@ -7,8 +7,8 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float moveSpeed = 5f;
-    [SerializeField] float atkCooldown = 0.1f;
+    [SerializeField] float moveSpeed = 0.5f;
+    [SerializeField] float atkCooldown = 0.2f;
     [SerializeField] float bulletHeightFromFeet = 1f;
     [SerializeField] float dashCooldown = 0.3f;
     [SerializeField] float dashStrength = 20;
@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     bool isInverseMovementControls = false;
     Entity entity;
     bool inputEnabled;
-    int animatorVelocityXHash, animatorVelocityZHash;
+    int animatorVelocityXHash, animatorVelocityZHash, animatorIsAttackingHash;
     public bool IsDead => entity.Health <= 0;
 
     private void Start()
@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
 
         animatorVelocityXHash = Animator.StringToHash("VelocityX");
         animatorVelocityZHash = Animator.StringToHash("VelocityZ");
+        animatorIsAttackingHash = Animator.StringToHash("isAttacking");
     }
 
     void OnEnable()
@@ -75,11 +76,16 @@ public class PlayerController : MonoBehaviour
 
     void UpdateAnimation()
     {
+        // movement
         float animatorVelocityX = animator.GetFloat(animatorVelocityXHash);
         float animatorVelocityZ = animator.GetFloat(animatorVelocityZHash);
         Vector3 rotatedMovement = transform.rotation * rb.velocity;
         animator.SetFloat(animatorVelocityXHash, Mathf.MoveTowards(animatorVelocityX, rotatedMovement.x / moveSpeed, (1 / 0.2f) * Time.deltaTime));
         animator.SetFloat(animatorVelocityZHash, Mathf.MoveTowards(animatorVelocityZ, rotatedMovement.z / moveSpeed, (1 / 0.2f) * Time.deltaTime));
+
+        // attack
+        bool isAttacking = Time.time < lastAtkTime + atkCooldown;
+        animator.SetBool(animatorIsAttackingHash, isAttacking);
     }
 
     private void RaycastMouse()

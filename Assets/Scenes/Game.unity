@@ -1909,7 +1909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 20
-  atkCooldown: 0.4
+  atkCooldown: 1
   bulletHeightFromFeet: 0
   dashCooldown: 0.3
   dashStrength: 100
