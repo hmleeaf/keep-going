@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float playableAreaMax = 10f;
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float cursorPlaneY;
+    [SerializeField] Animator animator;
 
     Rigidbody rb;
     TrailRenderer trailRenderer;
@@ -30,7 +31,7 @@ public class PlayerController : MonoBehaviour
     bool isInverseMovementControls = false;
     Entity entity;
     bool inputEnabled;
-
+    int animatorVelocityXHash, animatorVelocityZHash;
     public bool IsDead => entity.Health <= 0;
 
     private void Start()
@@ -38,6 +39,9 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         trailRenderer = GetComponent<TrailRenderer>();
         entity = GetComponent<Entity>();
+
+        animatorVelocityXHash = Animator.StringToHash("VelocityX");
+        animatorVelocityZHash = Animator.StringToHash("VelocityZ");
     }
 
     void OnEnable()
@@ -66,6 +70,16 @@ public class PlayerController : MonoBehaviour
         ClampToPlayableArea();
         Attack();
         Trail();
+        UpdateAnimation();
+    }
+
+    void UpdateAnimation()
+    {
+        float animatorVelocityX = animator.GetFloat(animatorVelocityXHash);
+        float animatorVelocityZ = animator.GetFloat(animatorVelocityZHash);
+        Vector3 rotatedMovement = transform.rotation * rb.velocity;
+        animator.SetFloat(animatorVelocityXHash, Mathf.MoveTowards(animatorVelocityX, rotatedMovement.x / moveSpeed, (1 / 0.2f) * Time.deltaTime));
+        animator.SetFloat(animatorVelocityZHash, Mathf.MoveTowards(animatorVelocityZ, rotatedMovement.z / moveSpeed, (1 / 0.2f) * Time.deltaTime));
     }
 
     private void RaycastMouse()
