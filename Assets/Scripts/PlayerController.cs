@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 0.5f;
+    [SerializeField] float backwardsSpeedOverride = 0.1f;
     [SerializeField] float atkCooldown = 0.2f;
     [SerializeField] float bulletHeightFromFeet = 1f;
     [SerializeField] float dashCooldown = 0.3f;
@@ -81,7 +82,7 @@ public class PlayerController : MonoBehaviour
         float animatorVelocityZ = animator.GetFloat(animatorVelocityZHash);
         Vector3 rotatedMovement = transform.rotation * rb.velocity;
         animator.SetFloat(animatorVelocityXHash, Mathf.MoveTowards(animatorVelocityX, rotatedMovement.x / moveSpeed, (1 / 0.2f) * Time.deltaTime));
-        animator.SetFloat(animatorVelocityZHash, Mathf.MoveTowards(animatorVelocityZ, rotatedMovement.z / moveSpeed, (1 / 0.2f) * Time.deltaTime));
+        animator.SetFloat(animatorVelocityZHash, Mathf.MoveTowards(animatorVelocityZ, rotatedMovement.z < 0 ? rotatedMovement.z * 0.5f / backwardsSpeedOverride : rotatedMovement.z / moveSpeed, (1 / 0.2f) * Time.deltaTime));
 
         // attack
         bool isAttacking = Time.time < lastAtkTime + atkCooldown;
@@ -117,7 +118,9 @@ public class PlayerController : MonoBehaviour
             moveDir = new Vector3(moveInput.x, 0, moveInput.y);
         }
         moveDir.Normalize();
-        rb.velocity = Vector3.ClampMagnitude(rb.velocity + moveDir * moveSpeed, Mathf.Max(rb.velocity.magnitude, moveSpeed));
+        Vector3 newVelocity = rb.velocity + moveDir * moveSpeed;
+        newVelocity.z = Mathf.Max(newVelocity.z, -backwardsSpeedOverride);
+        rb.velocity = Vector3.ClampMagnitude(newVelocity, Mathf.Max(rb.velocity.magnitude, moveSpeed));
     }
 
     private void Dash()

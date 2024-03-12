@@ -2158,6 +2158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 20
+  backwardsSpeedOverride: 2
   atkCooldown: 1
   bulletHeightFromFeet: 0
   dashCooldown: 0.3
