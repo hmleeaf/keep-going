@@ -13,6 +13,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float attackInterval = 2f;
     [SerializeField] float bulletHeightFromFeet = 1f;
+    [SerializeField] Animator animator;
 
     NavMeshAgent agent;
     PlayerController playerController;
@@ -53,6 +54,14 @@ public class EnemyAI : MonoBehaviour
             Movement();
             LookAtPlayer();
         }
+
+        UpdateAnimator();
+    }
+
+    void UpdateAnimator()
+    {
+        Vector3 moveDir = destination - transform.position;
+        animator.SetFloat("VelocityX", moveDir.x);
     }
 
     void LookAtPlayer()

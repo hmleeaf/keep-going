@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] float cursorPlaneY;
     [SerializeField] Animator animator;
+    [SerializeField] GameController gameController;
 
     Rigidbody rb;
     TrailRenderer trailRenderer;
@@ -119,7 +120,8 @@ public class PlayerController : MonoBehaviour
         }
         moveDir.Normalize();
         Vector3 newVelocity = rb.velocity + moveDir * moveSpeed;
-        newVelocity.z = Mathf.Max(newVelocity.z, -backwardsSpeedOverride);
+        if (gameController.State == GameController.GameState.Hyrule)
+            newVelocity.z = Mathf.Max(newVelocity.z, -backwardsSpeedOverride);
         rb.velocity = Vector3.ClampMagnitude(newVelocity, Mathf.Max(rb.velocity.magnitude, moveSpeed));
     }
 

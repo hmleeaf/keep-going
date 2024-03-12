@@ -2169,6 +2169,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 5197768659681181758, guid: db76371505576fa44a33eeb54c322133, type: 3}
   cursorPlaneY: 1
   animator: {fileID: 710414074}
+  gameController: {fileID: 2137233358}
 --- !u!54 &1029097433
 Rigidbody:
   m_ObjectHideFlags: 0
