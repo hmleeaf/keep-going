@@ -1,14 +1,9 @@
-using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using Unity.AI.Navigation;
-using UnityEditor.AI;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using static GameController;
 
 public class GameController : MonoBehaviour
 {
