@@ -264,3 +264,6 @@ MonoBehaviour:
   boundsMin: -10
   boundsMax: 10
   velocityMagnitude: 40
+  damage: 20
+  enemyHurtClip: {fileID: 8300000, guid: 23ed27339b25a2645b0b2019b4febb2a, type: 3}
+  playerHurtClip: {fileID: 8300000, guid: 401e218c30ff38646b3eebbd3a58e1f8, type: 3}

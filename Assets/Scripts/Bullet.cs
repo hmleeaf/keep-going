@@ -10,13 +10,17 @@ public class Bullet : MonoBehaviour
     [SerializeField] float boundsMax = 10f;
     [SerializeField] float velocityMagnitude = 40f;
     [SerializeField] int damage = 20;
+    [SerializeField] AudioClip enemyHurtClip;
+    [SerializeField] AudioClip playerHurtClip;
 
     Rigidbody rb;
     int bounceCount = 0;
+    AudioSource sfxSource;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        sfxSource = GameObject.FindGameObjectWithTag("SFX Audio Source").GetComponent<AudioSource>();
     }
 
     private void FixedUpdate()
@@ -31,6 +35,15 @@ public class Bullet : MonoBehaviour
         if (entity)
         {
             entity.Damage(damage);
+
+            if (entity.CompareTag("Enemy"))
+            {
+                sfxSource.PlayOneShot(enemyHurtClip, 1f);
+            }
+            else if (entity.CompareTag("Player"))
+            {
+                sfxSource.PlayOneShot(playerHurtClip, 1f);
+            }
             Destroy(gameObject);
         }
 

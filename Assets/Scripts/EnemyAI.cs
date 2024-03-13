@@ -14,6 +14,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] float attackInterval = 2f;
     [SerializeField] float bulletHeightFromFeet = 1f;
     [SerializeField] Animator animator;
+    [SerializeField] AudioClip enemyThrowClip;
 
     NavMeshAgent agent;
     PlayerController playerController;
@@ -22,6 +23,7 @@ public class EnemyAI : MonoBehaviour
     float lastAttackTime = float.MinValue;
     float lastMoveTime = float.MinValue;
     Entity entity;
+    AudioSource sfxSource;
 
     private void Start()
     {
@@ -29,6 +31,7 @@ public class EnemyAI : MonoBehaviour
         agent.updateRotation = false;
         playerController = FindObjectOfType<PlayerController>();
         entity = GetComponent<Entity>();
+        sfxSource = GameObject.FindGameObjectWithTag("SFX Audio Source").GetComponent<AudioSource>();
     }
 
     private void OnEnable()
@@ -97,6 +100,8 @@ public class EnemyAI : MonoBehaviour
             bulletObj.GetComponent<Rigidbody>().velocity = (playerController.transform.position - bulletObj.transform.position).normalized;
 
             lastAttackTime = Time.time;
+
+            sfxSource.PlayOneShot(enemyThrowClip, 0.4f);
         }
     }
 

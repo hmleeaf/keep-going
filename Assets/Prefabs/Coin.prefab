@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinValue: 1
+  coinClip: {fileID: 8300000, guid: 09f9f528e0b4254409b09cfffb1a3c79, type: 3}
 --- !u!114 &5673442339836068159
 MonoBehaviour:
   m_ObjectHideFlags: 0

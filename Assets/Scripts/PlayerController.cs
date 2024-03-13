@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float cursorPlaneY;
     [SerializeField] Animator animator;
     [SerializeField] GameController gameController;
+    [SerializeField] AudioClip playerThrowClip;
+    [SerializeField] AudioSource footstepsSource;
 
     Rigidbody rb;
     TrailRenderer trailRenderer;
@@ -35,6 +37,7 @@ public class PlayerController : MonoBehaviour
     bool inputEnabled;
     int animatorVelocityXHash, animatorVelocityZHash, animatorIsAttackingHash;
     public bool IsDead => entity.Health <= 0;
+    AudioSource sfxSource;
 
     private void Start()
     {
@@ -45,6 +48,8 @@ public class PlayerController : MonoBehaviour
         animatorVelocityXHash = Animator.StringToHash("VelocityX");
         animatorVelocityZHash = Animator.StringToHash("VelocityZ");
         animatorIsAttackingHash = Animator.StringToHash("isAttacking");
+
+        sfxSource = GameObject.FindGameObjectWithTag("SFX Audio Source").GetComponent<AudioSource>();
     }
 
     void OnEnable()
@@ -74,6 +79,19 @@ public class PlayerController : MonoBehaviour
         Attack();
         Trail();
         UpdateAnimation();
+        UpdateFootstepAudio();
+    }
+
+    void UpdateFootstepAudio()
+    {
+        if (rb.velocity.magnitude > 1f && !footstepsSource.isPlaying)
+        {
+            footstepsSource.Play();
+        }
+        else if (rb.velocity.magnitude <= 1f && footstepsSource.isPlaying)
+        {
+            footstepsSource.Stop();
+        }
     }
 
     void UpdateAnimation()
@@ -158,6 +176,7 @@ public class PlayerController : MonoBehaviour
                 transform.position.z
             );
             obj.GetComponent<Rigidbody>().velocity = transform.forward;
+            sfxSource.PlayOneShot(playerThrowClip, 0.4f);
         }
     }
 

@@ -79,6 +79,7 @@ public class GameController : MonoBehaviour
     [SerializeField] AudioSource audioSad;
     [SerializeField] AudioSource audioBackwards;
     [SerializeField] AudioSource audioTension;
+    [SerializeField] AudioSource audioPanting;
 
     float progress = 0;
     Vector3 initialHyruleCameraPos;
@@ -196,6 +197,16 @@ public class GameController : MonoBehaviour
             {
                 audioBackwards.Play();
             }
+        }
+
+        if (chaser.GetComponent<Chaser>().PlayerInTrigger && !audioPanting.isPlaying)
+        {
+            audioPanting.time = Mathf.Clamp01(1 - (float)playerEntity.Health / playerEntity.MaxHp) * audioPanting.clip.length;
+            audioPanting.Play();
+        }
+        if (!chaser.GetComponent<Chaser>().PlayerInTrigger && audioPanting.isPlaying)
+        {
+            audioPanting.Stop();
         }
     }
 

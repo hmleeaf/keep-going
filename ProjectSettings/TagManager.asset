@@ -7,6 +7,7 @@ TagManager:
   - Destructible
   - Wall
   - Enemy
+  - SFX Audio Source
   layers:
   - Default
   - TransparentFX
