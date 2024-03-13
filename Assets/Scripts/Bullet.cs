@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] int damage = 20;
     [SerializeField] AudioClip enemyHurtClip;
     [SerializeField] AudioClip playerHurtClip;
+    [SerializeField] AudioClip bounceClip;
 
     Rigidbody rb;
     int bounceCount = 0;
@@ -90,6 +91,10 @@ public class Bullet : MonoBehaviour
         if (bounceCount > maxBounce)
         {
             Destroy(gameObject);
+        }
+        else
+        {
+            sfxSource.PlayOneShot(bounceClip, 1f);
         }
     }
 

@@ -78,7 +78,6 @@ public class GameController : MonoBehaviour
     [SerializeField] AudioSource audioHappy;
     [SerializeField] AudioSource audioSad;
     [SerializeField] AudioSource audioBackwards;
-    [SerializeField] AudioSource audioTension;
     [SerializeField] AudioSource audioPanting;
 
     float progress = 0;
@@ -176,23 +175,12 @@ public class GameController : MonoBehaviour
             {
                 audioSad.Play();
             }
-
-            // start playing tension audio after condescending (1 stage after audio sad starts playing, intensifies the suspense)
-            if (!audioTension.isPlaying && progress > condescendingTextEndPoint)
-            {
-                audioTension.Play();
-            }
         } 
         else if (gameState == GameState.HyruleToLorule)
         {
             if (audioSad.isPlaying)
             {
                 audioSad.Stop();
-            }
-
-            if (audioTension.isPlaying)
-            {
-                audioTension.Stop();
             }
         }
         else if (gameState == GameState.Lorule)

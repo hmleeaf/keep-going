@@ -1820,7 +1820,6 @@ GameObject:
   - component: {fileID: 963194231}
   - component: {fileID: 963194234}
   - component: {fileID: 963194233}
-  - component: {fileID: 963194232}
   - component: {fileID: 963194235}
   - component: {fileID: 963194236}
   m_Layer: 0
@@ -1998,102 +1997,6 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: eb4c57dbfea73724f9f2308362902388, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 1
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!82 &963194232
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: f6b00e55ba3b8d5498e3e26af4b5bd59, type: 3}
-  m_PlayOnAwake: 0
   m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
@@ -2478,7 +2381,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 6f5422f6f2fec4e4cb95459bc961f501, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2834,7 +2737,7 @@ MonoBehaviour:
   cursorPlaneY: 1
   animator: {fileID: 710414074}
   gameController: {fileID: 2137233358}
-  playerThrowClip: {fileID: 8300000, guid: 1f06e63ee38fe5d40a5528cc0ddab79e, type: 3}
+  playerThrowClip: {fileID: 8300000, guid: 8dbed15e06d4b1348bbca35721caf6ba, type: 3}
   footstepsSource: {fileID: 963194235}
 --- !u!54 &1029097433
 Rigidbody:
@@ -3906,6 +3809,10 @@ PrefabInstance:
     - target: {fileID: 2118204892814817389, guid: 378862a775b10e74092cce261af4a539, type: 3}
       propertyPath: m_text
       value: "Use A and D to \nmove around walls."
+      objectReference: {fileID: 0}
+    - target: {fileID: 2321302804842859091, guid: 378862a775b10e74092cce261af4a539, type: 3}
+      propertyPath: m_fontSize
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2841879835311827423, guid: 378862a775b10e74092cce261af4a539, type: 3}
       propertyPath: m_LocalPosition.z
@@ -9996,7 +9903,6 @@ MonoBehaviour:
   audioHappy: {fileID: 963194231}
   audioSad: {fileID: 963194234}
   audioBackwards: {fileID: 963194233}
-  audioTension: {fileID: 963194232}
   audioPanting: {fileID: 963194236}
 --- !u!4 &2137233359
 Transform:

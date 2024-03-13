@@ -6,12 +6,15 @@ public class Crate : MonoBehaviour
 {
     [SerializeField] GameObject coinPrefab;
     [SerializeField] float coinSpawnChance = 1f;
+    [SerializeField] AudioClip breakClip;
 
     Entity entity;
+    AudioSource sfxSource;
 
     private void Start()
     {
         entity = GetComponent<Entity>();
+        sfxSource = GameObject.FindGameObjectWithTag("SFX Audio Source").GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -25,6 +28,7 @@ public class Crate : MonoBehaviour
                 coinObj.transform.SetParent(transform.parent);
             }
 
+            sfxSource.PlayOneShot(breakClip, 1f);
             Destroy(gameObject);
         }
     }

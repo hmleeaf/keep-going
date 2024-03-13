@@ -153,7 +153,7 @@ MonoBehaviour:
   attackInterval: 2
   bulletHeightFromFeet: 0
   animator: {fileID: 5285064851463546035}
-  enemyThrowClip: {fileID: 8300000, guid: 1c277528dad877f46af81182d4e0c20f, type: 3}
+  enemyThrowClip: {fileID: 8300000, guid: 8dbed15e06d4b1348bbca35721caf6ba, type: 3}
 --- !u!114 &-1535299125552083561
 MonoBehaviour:
   m_ObjectHideFlags: 0

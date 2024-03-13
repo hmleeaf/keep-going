@@ -6,6 +6,7 @@ public class Coin : MonoBehaviour
 {
     [SerializeField] int coinValue = 1;
     [SerializeField] AudioClip coinClip;
+    [SerializeField, Range(0f, 1f)] float coinClipVolume = 1f;
 
     CoinManager coinManager;
     AudioSource sfxSource;
@@ -21,7 +22,7 @@ public class Coin : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             coinManager.AddCoin(coinValue);
-            sfxSource.PlayOneShot(coinClip, 1f);
+            sfxSource.PlayOneShot(coinClip, coinClipVolume);
             Destroy(gameObject);
         }
     }
