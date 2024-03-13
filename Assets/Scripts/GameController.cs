@@ -91,6 +91,7 @@ public class GameController : MonoBehaviour
     float lastAmbientTextSpawnTime = float.MinValue;
     Vector3 loruleSpawn;
     Dictionary<Prompts.Condition, AmbientText> activeConditionTexts = new Dictionary<Prompts.Condition, AmbientText>();
+    float maxHappyVolume, maxSadVolume, maxPantingVolume;
 
     public float Progress { get { return progress; } }
     public float TransitionableDistance { get { return transitionableDistance; } }
@@ -119,6 +120,9 @@ public class GameController : MonoBehaviour
         initialHyruleCameraPos = HyruleCamera.transform.position;
         initialLoruleCameraPos = LoruleCamera.transform.position;
         initialChaserPosition = chaser.transform.position;
+        maxHappyVolume = audioHappy.volume;
+        maxSadVolume = audioSad.volume;
+        maxPantingVolume = audioPanting.volume;
     }
 
     private void OnEnable()
@@ -152,13 +156,13 @@ public class GameController : MonoBehaviour
             // lerp happy audio volume from 0 to 1 between start and condescending 
             if (audioHappy.isPlaying)
             {
-                audioHappy.volume = Mathf.Clamp01(1 - progress / condescendingTextEndPoint);
+                audioHappy.volume = maxHappyVolume * Mathf.Clamp01(1 - progress / condescendingTextEndPoint);
             }
 
             // lerp sad audio volume from 0 to 1 between indifferent and manipulative (stays 1 afterwards until transition)
             if (audioSad.isPlaying)
             {
-                audioSad.volume = Mathf.Clamp01((progress - indifferentTextEndPoint) / (manipulativeTextEndPoint - indifferentTextEndPoint));
+                audioSad.volume = maxSadVolume * Mathf.Clamp01((progress - indifferentTextEndPoint) / (manipulativeTextEndPoint - indifferentTextEndPoint));
             }
 
             // stop playing happy audio after condescending (1 stage after sad starts playing, should overlap with sad during indifferent to condescending transition)
@@ -201,7 +205,7 @@ public class GameController : MonoBehaviour
 
         if (chaser.GetComponent<Chaser>().PlayerInTrigger && !audioPanting.isPlaying && gameState == GameState.Hyrule)
         {
-            audioPanting.time = Mathf.Clamp01(1 - (float)playerEntity.Health / playerEntity.MaxHp) * audioPanting.clip.length;
+            audioPanting.time = maxPantingVolume * Mathf.Clamp01(1 - (float)playerEntity.Health / playerEntity.MaxHp) * audioPanting.clip.length;
             audioPanting.Play();
         }
         if (!chaser.GetComponent<Chaser>().PlayerInTrigger && audioPanting.isPlaying)

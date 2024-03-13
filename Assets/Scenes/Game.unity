@@ -2094,7 +2094,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: f6b00e55ba3b8d5498e3e26af4b5bd59, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -2190,7 +2190,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: e38c94a747141fc4fb475e0594305be6, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -2286,7 +2286,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: c692c329416734a4e8679408ad2369be, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -9936,6 +9936,25 @@ MonoBehaviour:
   pregenDistance: 50
   wavesPrefabs:
   - {fileID: 6276200097862105780, guid: aa7aed2e983af2b429eb980c504ecb0f, type: 3}
+  - {fileID: 6276200097862105780, guid: afb62b41f59345f479da62c03af17442, type: 3}
+  - {fileID: 6276200097862105780, guid: 491deb57495a93b469332f387105f3c9, type: 3}
+  - {fileID: 6276200097862105780, guid: bdd85c40e6cc0b44a86407e92a34db26, type: 3}
+  - {fileID: 6276200097862105780, guid: daacb94e547420f4984e918cd076db8d, type: 3}
+  - {fileID: 6276200097862105780, guid: 57c5a57aa8504dd458266e8857a44566, type: 3}
+  - {fileID: 6276200097862105780, guid: 804090ebcc837be449c1163ee3007ec6, type: 3}
+  - {fileID: 6276200097862105780, guid: 9b80e98c9dc55bc4186fa878212b3ba3, type: 3}
+  - {fileID: 6276200097862105780, guid: 97d1b44e67982934ab828acf5de3cb5e, type: 3}
+  - {fileID: 6276200097862105780, guid: 8f9af69b36721254bb8bbc12a75500e0, type: 3}
+  - {fileID: 6276200097862105780, guid: 1f2e5c9c49ba5244582c38b235997a93, type: 3}
+  - {fileID: 6276200097862105780, guid: 637ca949f8827264aa0057fcb5bc7f5f, type: 3}
+  - {fileID: 6276200097862105780, guid: b03a8837a7248154897f1352b264ec0f, type: 3}
+  - {fileID: 6276200097862105780, guid: 4855807beb61bdb47816c9f5ef874ff7, type: 3}
+  - {fileID: 6276200097862105780, guid: 9dece5230291e8441b1720741e0b32e9, type: 3}
+  - {fileID: 6276200097862105780, guid: 21b5989612a442740ad266848c31d38d, type: 3}
+  - {fileID: 6276200097862105780, guid: 1d9f0f129cc4018438cad1a6418a8928, type: 3}
+  - {fileID: 6276200097862105780, guid: c2080578ff3ec7840b70021267f0fc77, type: 3}
+  - {fileID: 6276200097862105780, guid: 41a2f397966b37a41bc3777c7972e8b2, type: 3}
+  - {fileID: 6276200097862105780, guid: be3ba56772ef9604eb630941c40101bf, type: 3}
   waveZSize: 60
   wavesContainer: {fileID: 1805021002}
   chaser: {fileID: 1433214638}
