@@ -74,6 +74,12 @@ public class GameController : MonoBehaviour
     [Header("Coin")]
     [SerializeField] CoinManager coinManager;
 
+    [Header("Audio")]
+    [SerializeField] AudioSource audioHappy;
+    [SerializeField] AudioSource audioSad;
+    [SerializeField] AudioSource audioBackwards;
+    [SerializeField] AudioSource audioTension;
+
     float progress = 0;
     Vector3 initialHyruleCameraPos;
     Vector3 initialLoruleCameraPos;
@@ -135,6 +141,62 @@ public class GameController : MonoBehaviour
         CheckConditionalPrompts();
         ClampPlayerZ();
         CheckEnd();
+        UpdateAudio();
+    }
+
+    void UpdateAudio()
+    {
+        if (gameState == GameState.Hyrule)
+        {
+            // lerp happy audio volume from 0 to 1 between start and condescending 
+            if (audioHappy.isPlaying)
+            {
+                audioHappy.volume = Mathf.Clamp01(1 - progress / condescendingTextEndPoint);
+            }
+
+            // lerp sad audio volume from 0 to 1 between indifferent and manipulative (stays 1 afterwards until transition)
+            if (audioSad.isPlaying)
+            {
+                audioSad.volume = Mathf.Clamp01((progress - indifferentTextEndPoint) / (manipulativeTextEndPoint - indifferentTextEndPoint));
+            }
+
+            // stop playing happy audio after condescending (1 stage after sad starts playing, should overlap with sad during indifferent to condescending transition)
+            if (audioHappy.isPlaying && progress > condescendingTextEndPoint)
+            {
+                audioHappy.Stop();
+            }
+
+            // start playing sad audio after indifferent (1 stage before happy ends, should overlap with happy during indifferent to condescending transition)
+            if (!audioSad.isPlaying && progress > indifferentTextEndPoint)
+            {
+                audioSad.Play();
+            }
+
+            // start playing tension audio after condescending (1 stage after audio sad starts playing, intensifies the suspense)
+            if (!audioTension.isPlaying && progress > condescendingTextEndPoint)
+            {
+                audioTension.Play();
+            }
+        } 
+        else if (gameState == GameState.HyruleToLorule)
+        {
+            if (audioSad.isPlaying)
+            {
+                audioSad.Stop();
+            }
+
+            if (audioTension.isPlaying)
+            {
+                audioTension.Stop();
+            }
+        }
+        else if (gameState == GameState.Lorule)
+        {
+            if (!audioBackwards.isPlaying)
+            {
+                audioBackwards.Play();
+            }
+        }
     }
 
     void CheckEnd()
