@@ -199,7 +199,7 @@ public class GameController : MonoBehaviour
             }
         }
 
-        if (chaser.GetComponent<Chaser>().PlayerInTrigger && !audioPanting.isPlaying)
+        if (chaser.GetComponent<Chaser>().PlayerInTrigger && !audioPanting.isPlaying && gameState == GameState.Hyrule)
         {
             audioPanting.time = Mathf.Clamp01(1 - (float)playerEntity.Health / playerEntity.MaxHp) * audioPanting.clip.length;
             audioPanting.Play();

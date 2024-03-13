@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class Wave : MonoBehaviour
 {
-    [SerializeField] List<GameObject> barriers = new List<GameObject>();
-    [SerializeField] List<GameObject> crates = new List<GameObject>();
     [SerializeField] Vector3 localBoundsMin;
     [SerializeField] Vector3 localBoundsMax;
     [SerializeField] Transform enemySpawnPoint;
 
-    private void OnEnable()
+    Barrier[] barriers;
+    Crate[] crates;
+
+    private void Start()
     {
+        barriers = GetComponentsInChildren<Barrier>();
+        crates = GetComponentsInChildren<Crate>();
         SetBarriersActive(false);
     }
 
@@ -22,19 +25,19 @@ public class Wave : MonoBehaviour
 
     public void SetBarriersActive(bool active)
     {
-        foreach (GameObject barrier in barriers)
+        foreach (Barrier barrier in barriers)
         {
-            barrier.SetActive(active);
+            barrier.gameObject.SetActive(active);
         }
     }
     
     public void SetCratesActive(bool active)
     {
-        foreach (GameObject crate in crates)
+        foreach (Crate crate in crates)
         {
             if (crate != null)
             {
-                crate.SetActive(active);
+                crate.gameObject.SetActive(active);
             }
         }
     }
