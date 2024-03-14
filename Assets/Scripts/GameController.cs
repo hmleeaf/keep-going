@@ -91,6 +91,7 @@ public class GameController : MonoBehaviour
     Vector3 loruleSpawn;
     Dictionary<Prompts.Condition, AmbientText> activeConditionTexts = new Dictionary<Prompts.Condition, AmbientText>();
     float maxHappyVolume, maxSadVolume, maxPantingVolume, maxBackwardsVolume;
+    bool finishedTutorial = false;
 
     public float Progress { get { return progress; } }
     public float TransitionableDistance { get { return transitionableDistance; } }
@@ -192,14 +193,14 @@ public class GameController : MonoBehaviour
 
             if (!audioBackwards.isPlaying)
             {
-                audioBackwards.PlayDelayed(transitionText1Duration);
+                audioBackwards.PlayDelayed(transitionText1Duration + 1f + 2f);
             }
         }
 
 
-        if (gameState == GameState.Lorule && progress < 150f)
+        if (gameState == GameState.Lorule && progress < tutorialLength)
         {
-            audioBackwards.volume = maxBackwardsVolume * Mathf.Clamp01(progress / 150f);
+            audioBackwards.volume = maxBackwardsVolume * Mathf.Clamp01(progress / tutorialLength);
         }
 
         if (gameState == GameState.Lorule && progress < 0f)
@@ -282,6 +283,11 @@ public class GameController : MonoBehaviour
             case GameState.Lorule:
                 progress = Mathf.Min(progress, playerController.transform.position.z);
                 break;
+        }
+
+        if (!finishedTutorial && progress > tutorialLength)
+        {
+            finishedTutorial = true;
         }
     }
 
@@ -400,7 +406,11 @@ public class GameController : MonoBehaviour
 
     void Respawn()
     {
-        tutorialObject.SetActive(false);
+        if (finishedTutorial)
+        {
+            tutorialObject.SetActive(false);
+        }
+
         foreach (AmbientText ambientText in ambientTexts)
         {
             Destroy(ambientText.gameObject);
@@ -416,9 +426,10 @@ public class GameController : MonoBehaviour
             waves.Clear();
 
             progress = 0;
-            playerController.transform.position = new Vector3(0, 1, tutorialLength - 30f);
+            playerController.transform.position = new Vector3(0, 1, finishedTutorial ? tutorialLength - 30f : 0);
             playerEntity.HealToFull();
             chaser.transform.position = initialChaserPosition;
+            coinManager.LoseAllCoins();
         }
         else if (gameState == GameState.Lorule)
         {
@@ -435,9 +446,9 @@ public class GameController : MonoBehaviour
                 }
             }
 
-            progress = loruleSpawn.z;
-            playerController.transform.position = loruleSpawn;
             playerEntity.HealToFull();
+            playerController.transform.position = loruleSpawn;
+            progress = loruleSpawn.z;
         }
     }
 

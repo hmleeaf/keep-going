@@ -21,6 +21,12 @@ public class CoinManager : MonoBehaviour
         UpdateText();
     }
 
+    public void LoseAllCoins()
+    {
+        coins = 0;
+        UpdateText();
+    }
+
     void UpdateText()
     {
         coinText.text = coins.ToString();
