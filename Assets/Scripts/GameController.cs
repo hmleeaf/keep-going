@@ -148,9 +148,6 @@ public class GameController : MonoBehaviour
         ClampPlayerZ();
         CheckEnd();
         UpdateAudio();
-
-        Debug.Log("progress: " + progress);
-        Debug.Log("player z: " + playerController.transform.position.z);
     }
 
     void UpdateAudio()
