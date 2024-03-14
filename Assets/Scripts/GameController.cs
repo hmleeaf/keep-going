@@ -249,7 +249,7 @@ public class GameController : MonoBehaviour
     {
         if (gameState == GameState.Hyrule)
         {
-            float zBound = Camera.main.transform.position.z + ambientZRange.x;
+            float zBound = Camera.main.transform.position.z + ambientZRange.x + 1f;
             if (playerController.transform.position.z < zBound)
             {
                 playerController.transform.position = new Vector3(
@@ -261,7 +261,7 @@ public class GameController : MonoBehaviour
         }
         else if (gameState == GameState.Lorule)
         {
-            float zBound = Camera.main.transform.position.z - ambientZRange.x;
+            float zBound = Camera.main.transform.position.z - ambientZRange.x - 1f;
             if (playerController.transform.position.z > zBound)
             {
                 playerController.transform.position = new Vector3(
