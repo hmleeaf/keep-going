@@ -4096,7 +4096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4688539347851342238, guid: 378862a775b10e74092cce261af4a539, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 66.3
+      value: 77.3
       objectReference: {fileID: 0}
     - target: {fileID: 5526087812614599081, guid: 378862a775b10e74092cce261af4a539, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4104,7 +4104,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714175179063912943, guid: 378862a775b10e74092cce261af4a539, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.110001
+      value: 18.1
       objectReference: {fileID: 0}
     - target: {fileID: 6276200097862105780, guid: 378862a775b10e74092cce261af4a539, type: 3}
       propertyPath: m_Name
@@ -10117,7 +10117,7 @@ MonoBehaviour:
   conditionalTextPrefab: {fileID: 412528564088269546, guid: cfc2faacd5021cc4e9e742303a06dd94, type: 3}
   conditionalTextDuration: 2.5
   conditionalTextCooldown: 2.5
-  coinTextDistance: 110
+  coinTextDistance: 120
   encouragingTextEndPoint: 500
   indifferentTextEndPoint: 800
   condescendingTextEndPoint: 1100
