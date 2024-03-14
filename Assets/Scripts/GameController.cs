@@ -148,6 +148,9 @@ public class GameController : MonoBehaviour
         ClampPlayerZ();
         CheckEnd();
         UpdateAudio();
+
+        Debug.Log("progress: " + progress);
+        Debug.Log("player z: " + playerController.transform.position.z);
     }
 
     void UpdateAudio()
@@ -406,6 +409,7 @@ public class GameController : MonoBehaviour
 
     void Respawn()
     {
+        if (gameState == GameState.HyruleToLorule) return;
         if (finishedTutorial)
         {
             tutorialObject.SetActive(false);
@@ -425,8 +429,7 @@ public class GameController : MonoBehaviour
             }
             waves.Clear();
 
-            progress = 0;
-            playerController.transform.position = new Vector3(0, 1, finishedTutorial ? tutorialLength - 30f : 0);
+            playerController.transform.position = new Vector3(0, 1, progress);
             playerEntity.HealToFull();
             chaser.transform.position = initialChaserPosition;
             coinManager.LoseAllCoins();
@@ -447,9 +450,16 @@ public class GameController : MonoBehaviour
             }
 
             playerEntity.HealToFull();
-            playerController.transform.position = loruleSpawn;
-            progress = loruleSpawn.z;
+            playerController.transform.position = new Vector3(0, 1, progress);
         }
+
+        screenText.FadeIn("Keep going", Color.white, 0.3f);
+        Invoke(nameof(FadeOutDeathText), 1f);
+    }
+
+    void FadeOutDeathText()
+    {
+        screenText.FadeOut(0.3f);
     }
 
     void DeactivateCrates()
