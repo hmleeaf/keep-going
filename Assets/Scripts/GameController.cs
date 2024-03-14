@@ -90,7 +90,7 @@ public class GameController : MonoBehaviour
     float lastAmbientTextSpawnTime = float.MinValue;
     Vector3 loruleSpawn;
     Dictionary<Prompts.Condition, AmbientText> activeConditionTexts = new Dictionary<Prompts.Condition, AmbientText>();
-    float maxHappyVolume, maxSadVolume, maxPantingVolume;
+    float maxHappyVolume, maxSadVolume, maxPantingVolume, maxBackwardsVolume;
 
     public float Progress { get { return progress; } }
     public float TransitionableDistance { get { return transitionableDistance; } }
@@ -122,6 +122,7 @@ public class GameController : MonoBehaviour
         maxHappyVolume = audioHappy.volume;
         maxSadVolume = audioSad.volume;
         maxPantingVolume = audioPanting.volume;
+        maxBackwardsVolume = audioBackwards.volume;
     }
 
     private void OnEnable()
@@ -176,18 +177,42 @@ public class GameController : MonoBehaviour
                 audioSad.Play();
             }
         } 
-        else if (gameState == GameState.HyruleToLorule)
+        
+        if (gameState == GameState.HyruleToLorule)
         {
+            if (audioHappy.isPlaying)
+            {
+                audioHappy.Stop();
+            }
+
             if (audioSad.isPlaying)
             {
                 audioSad.Stop();
             }
-        }
-        else if (gameState == GameState.Lorule)
-        {
+
             if (!audioBackwards.isPlaying)
             {
-                audioBackwards.Play();
+                audioBackwards.PlayDelayed(transitionText1Duration);
+            }
+        }
+
+
+        if (gameState == GameState.Lorule && progress < 150f)
+        {
+            audioBackwards.volume = maxBackwardsVolume * Mathf.Clamp01(progress / 150f);
+        }
+
+        if (gameState == GameState.Lorule && progress < 0f)
+        {
+            if (audioBackwards.isPlaying)
+            {
+                audioBackwards.Stop();
+            }
+
+            audioHappy.volume = maxHappyVolume * Mathf.Clamp01(progress / endDistance);
+            if (!audioHappy.isPlaying)
+            {
+                audioHappy.Play();
             }
         }
 
