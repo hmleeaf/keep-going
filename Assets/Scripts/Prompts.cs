@@ -105,27 +105,27 @@ public static class Prompts
             Condition.WrongDirection,
             new string[]
             {
-                "Hey, wrong way.",
-                "You are supposed to go forward.", 
-                "Forward, buddy."
+                "<color=#9D2B29>Wrong way, buddy.</color>",
+                "<color=#9D2B29>That's not forward.</color>", 
             }
         },
         {
             Condition.InFog,
             new string[] 
             {
-                "Don't go there.", 
-                "Come back out,", 
-                "Doesn't feel right in there, does it?", 
+                "<color=#9D2B29>Hurts, doesn't it?</color>",
+                "<color=#9D2B29>Ouch, that must hurt.</color>",
+                "<color=#9D2B29>Why make yourself suffer?</color>",
+                "<color=#9D2B29>Don't do this to yourself.</color>",
             }
         }, 
         { 
             Condition.InDeepFog, 
             new string[]
             {
-                "You need to get out now.",
-                "Don't do this to yourself.", 
-                "Why make yourself suffer?", 
+                "<color=#9D2B29>You need to get out now.</color>",
+                "<color=#9D2B29>Back out while you still can.</color>",
+                "<color=#9D2B29>Get out or you will hurt yourself.</color>", 
             }
         },        
         { 
@@ -141,11 +141,12 @@ public static class Prompts
             Condition.ProgressCanTransition, 
             new string[]
             {
-                "Whatever you do, do not turn back.", 
-                "Horrible things will happen to you if you go back now.", 
-                "Don't be different now. Don't back out.", 
-                "There is no going back now.", 
-                "You don't know what terrible things await you there.", 
+                "<color=#9D2B29>Whatever you do, do not turn back.</color>",
+                "<color=#9D2B29>Horrible things will happen if you go back.</color>",
+                "<color=#9D2B29>Don't be different. Don't back out.</color>",
+                "<color=#9D2B29>Who are you to think you can go back?</color>",
+                "<color=#9D2B29>There is not a choice to go back.</color>",
+                "<color=#9D2B29>Turn back? Pff. You wouldn't dare.</color>", 
             }
         },
     };

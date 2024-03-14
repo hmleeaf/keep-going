@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5946901188660094325}
   - component: {fileID: 4498959066793041466}
   - component: {fileID: 2650389382350643128}
-  m_Layer: 5
+  m_Layer: 14
   m_Name: Conditional Text Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 8700065103941767277}
   - component: {fileID: 1068342514596929392}
   - component: {fileID: 5685071383518848004}
-  m_Layer: 5
+  m_Layer: 14
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
