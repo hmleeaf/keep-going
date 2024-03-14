@@ -241,7 +241,9 @@ public class GameController : MonoBehaviour
         blackoutOverlay.FadeIn(Color.white, 5f);
         yield return new WaitForSeconds(5f);
         screenText.FadeIn("Thanks for playing.", Color.black, 3f);
-        yield return new WaitForSeconds(3f + 5f);
+        yield return new WaitForSeconds(3f);
+        playerController.DisableInput();
+        yield return new WaitForSeconds(5f);
         SceneManager.LoadScene("Title");
     }
 

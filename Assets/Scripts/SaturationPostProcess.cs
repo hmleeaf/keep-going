@@ -37,7 +37,7 @@ public class SaturationPostProcess : MonoBehaviour
         {
             float progress = gameController.Progress;
             float t = Mathf.Min(0f, progress);
-            t = t / gameController.EndDistance;
+            t = t / (gameController.EndDistance + 120f);
             colorAdjustments.saturation.value = Mathf.Lerp(-100, 0, t);
         } 
         else

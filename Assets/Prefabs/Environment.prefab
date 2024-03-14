@@ -2497,6 +2497,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree Shadows Caster (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 2969758141565244135, guid: bc444f1dc10e26a4499677f243ef7a2c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8319607505899816958, guid: bc444f1dc10e26a4499677f243ef7a2c, type: 3}
       propertyPath: m_LocalScale.x
       value: 20.3
@@ -3463,6 +3467,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree Shadows Caster (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2969758141565244135, guid: bc444f1dc10e26a4499677f243ef7a2c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8319607505899816958, guid: bc444f1dc10e26a4499677f243ef7a2c, type: 3}
       propertyPath: m_LocalScale.x
       value: 29.73
@@ -3536,6 +3544,10 @@ PrefabInstance:
     - target: {fileID: 2969758141565244135, guid: bc444f1dc10e26a4499677f243ef7a2c, type: 3}
       propertyPath: m_Name
       value: Tree Shadows Caster (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2969758141565244135, guid: bc444f1dc10e26a4499677f243ef7a2c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8319607505899816958, guid: bc444f1dc10e26a4499677f243ef7a2c, type: 3}
       propertyPath: m_LocalScale.x
@@ -3734,6 +3746,10 @@ PrefabInstance:
     - target: {fileID: 2969758141565244135, guid: bc444f1dc10e26a4499677f243ef7a2c, type: 3}
       propertyPath: m_Name
       value: Tree Shadows Caster
+      objectReference: {fileID: 0}
+    - target: {fileID: 2969758141565244135, guid: bc444f1dc10e26a4499677f243ef7a2c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8319607505899816958, guid: bc444f1dc10e26a4499677f243ef7a2c, type: 3}
       propertyPath: m_LocalPosition.x
