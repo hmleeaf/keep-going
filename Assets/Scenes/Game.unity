@@ -3123,7 +3123,7 @@ MonoBehaviour:
   autoRegen: 1
   autoRegenPerTick: 5
   autoRegenTick: 0.2
-  autoRegenWait: 1
+  autoRegenWait: 2
 --- !u!1001 &1074114018
 PrefabInstance:
   m_ObjectHideFlags: 0
