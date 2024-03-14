@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinPrefab: {fileID: 1576375394024240502, guid: 018fa5a95c075c345b02deb685319caa, type: 3}
-  coinSpawnChance: 1
+  coinSpawnChance: 0.4
   breakClip: {fileID: 8300000, guid: 1cfe195ccfe7aa2469ff0d41ecfec6ad, type: 3}
 --- !u!1001 &3337011112673297982
 PrefabInstance:

@@ -10207,7 +10207,7 @@ MonoBehaviour:
   chaserNaturalProgressionRate: 0.5
   navMeshSurface: {fileID: 690069903}
   enemyPrefab: {fileID: 1318540124296002471, guid: 76ba989432885714f9eed40209f7c232, type: 3}
-  enemyChance: 1
+  enemyChance: 0.2
   ambientTextPrefab: {fileID: 412528564088269546, guid: 51f816d3360418e4297250dd6746d576, type: 3}
   ambientTextXMin: -10
   ambientTextXMax: 10
@@ -10219,13 +10219,13 @@ MonoBehaviour:
   conditionalTextDuration: 2.5
   conditionalTextCooldown: 2.5
   coinTextDistance: 120
-  encouragingTextEndPoint: 500
-  indifferentTextEndPoint: 800
-  condescendingTextEndPoint: 1100
-  manipulativeTextEndPoint: 1400
+  encouragingTextEndPoint: 400
+  indifferentTextEndPoint: 600
+  condescendingTextEndPoint: 800
+  manipulativeTextEndPoint: 1000
   tutorialLength: 180
   tutorialObject: {fileID: 1768530896}
-  transitionableDistance: 200
+  transitionableDistance: 1000
   transitionText1Duration: 6
   transitionText2Duration: 4
   transitionTurnDuration: 2

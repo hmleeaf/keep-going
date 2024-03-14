@@ -51,9 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de36d56b734dc0549aad9658d1454edc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  barriers: []
   localBoundsMin: {x: -10, y: 0, z: -30}
   localBoundsMax: {x: 10, y: 0, z: 30}
+  enemySpawnPoint: {fileID: 0}
 --- !u!1001 &1616369091468062419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -246,6 +246,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3610673479443064167}
     m_Modifications:
+    - target: {fileID: 326163646044578218, guid: 65e52340a596e1846b3f5aec9d67cba3, type: 3}
+      propertyPath: coinSpawnChance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1219442075013357014, guid: 65e52340a596e1846b3f5aec9d67cba3, type: 3}
       propertyPath: m_Name
       value: Crate (4)
