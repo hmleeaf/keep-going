@@ -65,6 +65,9 @@ public class EnemyAI : MonoBehaviour
     {
         Vector3 moveDir = destination - transform.position;
         animator.SetFloat("VelocityX", moveDir.x);
+
+        bool attacking = Time.time < lastAttackTime + 0.3f;
+        animator.SetBool("isAttacking", attacking);
     }
 
     void LookAtPlayer()
