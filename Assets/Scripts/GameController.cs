@@ -63,8 +63,8 @@ public class GameController : MonoBehaviour
     [SerializeField] float transitionText1Duration = 3f;
     [SerializeField] float transitionText2Duration = 3f;
     [SerializeField] float transitionTurnDuration = 2f;
-    [SerializeField, Multiline] string transitionText1 = "You weren't like this before. \r\nYou weren't an aberration.";
-    [SerializeField, Multiline] string transitionText2 = "Don't go back. \r\n It's too late.";
+    [SerializeField, Multiline] string transitionText1 = "You weren't like this before. \r\nYou weren't an <color=#9D2B29>aberration</color>.";
+    [SerializeField, Multiline] string transitionText2 = "Go on then. Try. \r\n<color=#9D2B29>You won't get far.</color>";
     [SerializeField] float endDistance = -200f;
 
     [Header("Screen Text")]
@@ -570,6 +570,7 @@ public class GameController : MonoBehaviour
         if (!IsPromptSpawned(Prompts.Condition.WrongDirection) 
             && !IsPromptSpawned(Prompts.Condition.InFog)
             && !IsPromptSpawned(Prompts.Condition.InDeepFog)
+            && progress > transitionableDistance
             && playerController.transform.position.z < progress - 1f)
         {
             SpawnConditionalPrompt(Prompts.Condition.WrongDirection);
@@ -577,6 +578,7 @@ public class GameController : MonoBehaviour
 
         if (!IsPromptSpawned(Prompts.Condition.InFog) 
             && !IsPromptSpawned(Prompts.Condition.InDeepFog)
+            && progress > transitionableDistance
             && (float)playerEntity.Health / playerEntity.MaxHp < 1f 
             && gameState == GameState.Hyrule)
         {
@@ -584,7 +586,8 @@ public class GameController : MonoBehaviour
             SpawnConditionalPrompt(Prompts.Condition.InFog);
         }
 
-        if (!IsPromptSpawned(Prompts.Condition.InDeepFog) 
+        if (!IsPromptSpawned(Prompts.Condition.InDeepFog)
+            && progress > transitionableDistance
             && (float)playerEntity.Health / playerEntity.MaxHp < 0.4f 
             && gameState == GameState.Hyrule)
         {
