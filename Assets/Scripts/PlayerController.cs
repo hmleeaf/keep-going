@@ -74,10 +74,10 @@ public class PlayerController : MonoBehaviour
         RaycastMouse();
         OrientForward();
         Move();
-        Dash();
+        // Dash();
         ClampToPlayableArea();
         Attack();
-        Trail();
+        // Trail();
         UpdateAnimation();
         UpdateFootstepAudio();
     }

@@ -8,6 +8,7 @@ TagManager:
   - Wall
   - Enemy
   - SFX Audio Source
+  - Bullet
   layers:
   - Default
   - TransparentFX

@@ -127,4 +127,9 @@ public class EnemyAI : MonoBehaviour
     {
         aggroed = false;
     }
+
+    public void Aggro()
+    {
+        aggroed = true;
+    }
 }

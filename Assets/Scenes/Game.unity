@@ -3002,7 +3002,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1029097427}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -3067,8 +3067,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.2978373, g: 0.6135642, b: 0.9150943, a: 1}
-      key1: {r: 0.11374155, g: 0.22884019, b: 0.33962262, a: 0}
+      key0: {r: 0.8018868, g: 0.73287493, b: 0.4803756, a: 1}
+      key1: {r: 0.2924528, g: 0.25170043, b: 0.0758722, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -10207,7 +10207,7 @@ MonoBehaviour:
   chaserNaturalProgressionRate: 0.5
   navMeshSurface: {fileID: 690069903}
   enemyPrefab: {fileID: 1318540124296002471, guid: 76ba989432885714f9eed40209f7c232, type: 3}
-  enemyChance: 0.2
+  enemyChance: 0.4
   ambientTextPrefab: {fileID: 412528564088269546, guid: 51f816d3360418e4297250dd6746d576, type: 3}
   ambientTextXMin: -10
   ambientTextXMax: 10
